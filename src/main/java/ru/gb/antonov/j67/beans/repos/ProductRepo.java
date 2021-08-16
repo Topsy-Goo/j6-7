@@ -11,4 +11,16 @@ public interface ProductRepo extends JpaRepository<Product, Long>
 {
     List<Product> findAllByCostBetween (double minPrice, double maxPrice);
 
+/*  Чтобы создать другую сущность, нужно лишь создать такой же интерфейс для неё.
+
+    Репозитории бывают разные:
+
+    • Repository<T, ID> — базовый;
+
+    • CrudRepository<T, ID> — предоставляет базовые операции;
+
+    • PagingAndSortingRepository<T, ID> — добавляет метод для сортировки и метод для разбивки всей массы объектов на группы (страницы) (допускается одновременное применение сортировки) (?требуется уточнение?);
+
+    • JpaRepository<T, ID> — добавляет пакетные операции, возможность работы с объектными запросами.
+*/
 }

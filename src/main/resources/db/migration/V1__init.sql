@@ -1,6 +1,6 @@
 CREATE TABLE products
 (
-	id		bigserial PRIMARY KEY,
+	id		bigserial PRIMARY KEY,	-- flyway не знает слово IDENTITY (наверное, не поддерживает h2)
 	title	VARCHAR(255),
 	price	INT
 );

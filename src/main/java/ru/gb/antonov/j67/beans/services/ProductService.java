@@ -15,6 +15,12 @@ public class ProductService
 {
     private final ProductRepo productRepo;
 
+
+    //@Autowired < эта аннотация для конструктора необязательна
+    //public ProductService (ProductRepo pr)    < ломбок создаст этот конструктор
+    //{
+    //    productRepo = pr;
+    //}
 //-----------------------------------------------------------------------
 
     public ProductDto findById (Long id)
@@ -32,6 +38,10 @@ public class ProductService
         double maxPrice = max != null ? max.doubleValue() : Product.MAX_PRICE;
 
         return productRepo.findAllByCostBetween (minPrice, maxPrice);
+        /*  Название метода кодирует то, что он должен делать:
+            * findAll - вернуть список (объектов типа Product)
+            * ByCost - фильтровать по полю Product.cost
+            * Between - использовать интервал, заданный параметрами метода.  */
     }
 
     public Optional<ProductDto> createProduct (String title, double cost)
@@ -44,4 +54,6 @@ public class ProductService
         }
         return Optional.empty();
     }
+
+
 }

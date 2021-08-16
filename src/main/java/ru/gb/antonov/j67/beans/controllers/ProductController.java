@@ -15,6 +15,13 @@ public class ProductController
     private final ProductService productService;
 
 
+    //@Autowired < эта аннотация для конструктора необязательна
+    //public ProductController (ProductService ps)  < ломбок создаст этот конструктор
+    //{
+    //    productService = ps;
+    //}
+//--------------------------------------------------------------------
+
     //http://localhost:8189/market/products
     @GetMapping ("/products")
     public List<Product> findAll()

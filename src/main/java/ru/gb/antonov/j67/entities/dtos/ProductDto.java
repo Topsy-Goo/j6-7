@@ -3,7 +3,7 @@ package ru.gb.antonov.j67.entities.dtos;
 import lombok.Data;
 import ru.gb.antonov.j67.entities.Product;
 
-@Data
+@Data   //< здесь ломбок пришёлся очень кстати: как раз для «умолчальных» геттеров и сеттеров.
 public class ProductDto
 {
     private Long   productId;
