@@ -22,13 +22,6 @@ public class ProductController
     //}
 //--------------------------------------------------------------------
 
-    //http://localhost:8189/market/products
-    @GetMapping ("/products")
-    public List<Product> findAll()
-    {
-        return productService.findAll();
-    }
-
    //http://localhost:8189/market/products
     @PostMapping ("/products")
     public ProductDto createProduct (@RequestBody ProductDto pdto)
@@ -51,14 +44,25 @@ public class ProductController
         productService.deleteById (id);
     }
 
-    //http://localhost:8189/market/products/price_filter?min=50&max=90
-    //http://localhost:8189/market/products/price_filter?min=50
-    //http://localhost:8189/market/products/price_filter?max=90
-    @GetMapping ("/products/price_filter")
+//  исправлено по результатам разбора ДЗ: теперь этот метод отвечает и за обработку запроса всех товаров.
+    //http://localhost:8189/market/products?min=50&max=90
+    //http://localhost:8189/market/products?min=50
+    //http://localhost:8189/market/products?max=90
+    //http://localhost:8189/market/products
+    @GetMapping ("/products")
     public List<Product> getProductsByPriceRange (@RequestParam(name="min", required = false) Integer min,
                                                   @RequestParam(name="max", required = false) Integer max)
     {
         return productService.getProductsByPriceRange (min, max);
     }
+
+/*исправлено по результатам разбора ДЗ: теперь вместо этого метода вызывается фильтр getProductsByPriceRange().
+
+    //http://localhost:8189/market/products
+    @GetMapping ("/products")
+    public List<Product> findAll()
+    {
+        return productService.findAll();
+    } //*/
 
 }
