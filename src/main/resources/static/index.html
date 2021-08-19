@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Marketplace</title>
+
+<!-- Эти ссылки подключают библиотеку стилей из https://getbootstrap.com/docs. -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+	<!-- Урезанная версия ангулара — то что нужно: -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+
+	<!-- Наш js-файл: -->
+	<script src="index.js"></script>
+
+</head>
+<!-- ng-app - атрибут указывает, каким приложением управляется помеченный им элемент и все вложенные в него элементы. -->
+<body ng-app="market-front">
+
+<!-- ng-controller - указывает, какой контроллер управлет помеченным им элементом. -->
+<div class="container" ng-controller="indexController">
+
+	<h1>Marketplace</h1>
+<!--
+	{{products}}	так можно вывести JSON на экран.
+-->
+
+	<!-- Обрабатываем нажатие на кнопку при пом. листнеров: -->
+	<button class="btn btn-success" ng-click="loadProductsPage()">Обновить</button>
+	&nbsp;
+	&nbsp;
+	<button class="btn btn-primary" ng-click="prevProductsPage()">&lt;&nbsp;Предыдущая страница</button>
+	&nbsp;
+	<button class="btn btn-primary" ng-click="nextProductsPage()">Следующая страница&nbsp;&gt;</button>
+
+	<table class="table">
+		<tr><th>id</th><th>title</th><th>cost</th><th>&nbsp;</th></tr>
+
+		<!-- Из контроллера market-front.indexController получаем JSON-объект productsPage.
+			 Выводим все строки таблицы на экран при пом. цикла ng-repeat (аналог for-each): -->
+		<tr ng-repeat="p in productsPage.content">
+			<!-- Если переменная в JS-файл помечена приставкой $scope., то к ней возможен доступ из HTML-файла с пом.двойных фигурных скобок: -->
+			<td>{{p.productId}}</td>
+			<td>{{p.productTitle}}</td>
+			<td>{{p.productCost}}</td>
+			<td>
+				<button class="btn btn-info"
+					title="Посмотреть информацию о продукт."
+					ng-click="infoProduct(p)">Посмотреть</button>
+				&nbsp;
+				<button class="btn btn-danger"
+					title="Удалить продукт."
+					ng-click="deleteProduct(p.productId)">Удалить</button>
+			</td>
+		</tr>
+		<!-- Объект productsPage (тип Page) содержит много полезной информации: -->
+		<caption>
+			Всего товаров: {{productsPage.totalElements}}&nbsp;&nbsp;•&nbsp;&nbsp;
+			Элементов на странице макс.: {{productsPage.pageable.pageSize}}&nbsp;&nbsp;•&nbsp;&nbsp;
+			Страница: {{productsPage.pageable.pageNumber +1}}/{{productsPage.totalPages}}
+		</caption>
+	</table>
+
+</div>
+
+</body>
+</html>

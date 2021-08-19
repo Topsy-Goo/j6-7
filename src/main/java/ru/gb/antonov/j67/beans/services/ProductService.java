@@ -1,34 +1,51 @@
 package ru.gb.antonov.j67.beans.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.gb.antonov.j67.beans.repos.ProductRepo;
 import ru.gb.antonov.j67.entities.Product;
 import ru.gb.antonov.j67.entities.dtos.ProductDto;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor    //< создаёт конструктор с параметрами для инициализации всех final-полей.
 public class ProductService
 {
     private final ProductRepo productRepo;
+    private static int pageIndexLast = 0;
 
-
-    //@Autowired < эта аннотация для конструктора необязательна
-    //public ProductService (ProductRepo pr)    < ломбок создаст этот конструктор
-    //{
-    //    productRepo = pr;
-    //}
 //-----------------------------------------------------------------------
 
-    public ProductDto findById (Long id)
+    public Product findById (Long id)
     {
-        return new ProductDto (productRepo.findById(id).orElse(null));
+        return productRepo.findById(id).orElse(null);
     }
 
-    public List<Product> findAll ()  {   return productRepo.findAll ();   }
+    public Page<Product> findAll (int pageIndex, int pageSize)
+    {
+        pageIndex = validatePageIndex (pageIndex, pageSize);
+
+        return productRepo.findAll (PageRequest.of (pageIndex, pageSize));
+    }
+
+    private int validatePageIndex (int pageIndex, int pageSize)
+    {
+        long productsCount = productRepo.count();
+        int pagesCount    = (int)(productsCount / pageSize);
+
+        if (productsCount % pageSize > 0)
+            pagesCount ++;
+
+        if (pageIndex >= pagesCount)
+            pageIndex = pagesCount -1;
+
+        return Math.max(pageIndex, 0);
+    }
 
     public void deleteById (Long id)  {   productRepo.deleteById(id);   }
 
@@ -38,22 +55,27 @@ public class ProductService
         double maxPrice = max != null ? max.doubleValue() : Product.MAX_PRICE;
 
         return productRepo.findAllByCostBetween (minPrice, maxPrice);
-        /*  Название метода кодирует то, что он должен делать:
-            * findAll - вернуть список (объектов типа Product)
-            * ByCost - фильтровать по полю Product.cost
-            * Between - использовать интервал, заданный параметрами метода.  */
     }
 
-    public Optional<ProductDto> createProduct (String title, double cost)
+    public Product createProduct (String title, double cost)
     {
-        Product p = Product.newProduct(title, cost).orElse(null);
-        if (p != null)
-        {
-            Product saved = productRepo.save(p);
-            return Optional.of(new ProductDto (saved));
-        }
-        return Optional.empty();
+        return productRepo.save (Product.newProduct(title, cost));
+    }
+//--------- Методы для преобразований Product в ProductDto --------------
+
+    public static ProductDto dtoFromProduct (Product product)
+    {
+        return new ProductDto (product);
     }
 
-
+    public static List<ProductDto> productListToDtoList (List<Product> pp)
+    {
+        if (pp != null)
+        {
+            return pp.stream()
+                     .map(ProductService::dtoFromProduct)
+                     .collect (Collectors.toList());
+        }
+        return Collections.emptyList();
+    }
 }

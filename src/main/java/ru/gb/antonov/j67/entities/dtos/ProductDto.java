@@ -21,6 +21,7 @@ public class ProductDto
             productTitle = product.getTitle();
             productCost  = product.getCost();
         }
+        else throw new IllegalArgumentException();
     }
 
 }

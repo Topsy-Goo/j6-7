@@ -1,12 +1,9 @@
 package ru.gb.antonov.j67.entities;
 
 import javax.persistence.*;
-import java.util.Optional;
 
 @Entity
 @Table(name="products")
-//@NoArgsConstructor (access = AccessLevel.PROTECTED) < ломбок создаёт умолчальный конструктор, но непонятно, в чём выгода.
-//@Data     < генерит геттеры и сеттеры, которые годятся только для учебных проектов; имеет опцию, кажется, для статического конструктора.
 public class Product
 {
     public static final Double MIN_PRICE = 0.0;
@@ -24,16 +21,16 @@ public class Product
     private double cost;
 
 
-    protected Product(){}     //< эта строчка вдвое короче аннотации ломбока
+    protected Product(){}
 
-    public static Optional<Product> newProduct (String t, double c)
+    public static Product newProduct (String t, double c)
     {
         Product p = new Product();
+
         if (!p.setTitle(t) || !p.setCost(c))
-        {
-            return Optional.empty();
-        }
-        return Optional.of(p);
+            throw new IllegalArgumentException();
+
+        return p;
     }
 //----------------- Геттеры и сеттеры -----------------------------------
 
@@ -69,4 +66,5 @@ public class Product
     {
         return cost >= MIN_PRICE  &&  cost <= MAX_PRICE;
     }
+
 }
