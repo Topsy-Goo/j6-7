@@ -41,7 +41,7 @@
 		<!-- Из контроллера market-front.indexController получаем JSON-объект productsPage.
 			 Выводим все строки таблицы на экран при пом. цикла ng-repeat (аналог for-each): -->
 		<tr ng-repeat="p in productsPage.content">
-			<!-- Если переменная в JS-файл помечена приставкой $scope., то к ней возможен доступ из HTML-файла с пом.двойных фигурных скобок: -->
+			<!-- Если переменная в JS-файле помечена приставкой $scope., то к ней возможен доступ из HTML-файла с пом.двойных фигурных скобок: -->
 			<td>{{p.productId}}</td>
 			<td>{{p.productTitle}}</td>
 			<td>{{p.productCost}}</td>

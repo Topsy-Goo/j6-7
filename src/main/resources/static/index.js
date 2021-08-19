@@ -20,13 +20,6 @@ angular.module('market-front', []).controller('indexController', function ($scop
 	var productPageTotal = 0;
 
 
-/*	$http.get (contextPath + 'products/4')
-		 .then (function (response)
-		 {
-		 	console.log (response);
-		 	console.log (response.data);
-		 });*/
-
 /*	Так выполняется GET-запрос в приложение. Если этот запрос нужно выполянть из HTML-файла, то его придётся поместить в функцию (см.след.пример).
 
 	$http.get (contextPath + 'products')
@@ -35,23 +28,31 @@ angular.module('market-front', []).controller('indexController', function ($scop
 		 	//...
 		 });
 
-	Описание функции (для функций $scope. и var используются также, как у переменных):	*/
-	$scope.loadProductsPage = function()
+	Описание функции (для функций $scope. и var используются также, как для переменных):	*/
+	$scope.loadProductsPage = function ()
 	{
-		var path = contextPath + 'products/page?p='+ productPageCurrent;
+/*		var path = contextPath + 'products/page?p='+ productPageCurrent;
 		console.log (path);
-		$http.get (path)	//< НЕблокирующая операция
-			 .then (function (response)			//< получили ответ (через success-колбэк)
-			 {
-				$scope.productsPage = response.data;	//< переменную можно объявлять где угодно в коде
-				productPageCurrent = $scope.productsPage.pageable.pageNumber;
-				productPageTotal = $scope.productsPage.totalPages;
+		$http.get (path)*/	//< НЕблокирующая операция
+		$http({
+			url: contextPath + 'products/page',
+			method: 'GET',
+			params:	{
+					p: productPageCurrent
+					}
+		})
+		.then (function (response)			//< получили ответ (через success-колбэк)
+		{
+			$scope.productsPage = response.data;	//< переменную можно объявлять где угодно в коде
+			productPageCurrent = $scope.productsPage.pageable.pageNumber;
+			productPageTotal = $scope.productsPage.totalPages;
 
-//				console.log (response);	  < напечатать в консоли всю полученную информацию, включая служебную
-				console.log (response.data);	//< напечатать в консоли только запрошенные данные
-				console.log ('productPageTotal: '+ productPageTotal);
-				console.log ('productPageCurrent: '+ productPageCurrent);
-			 });
+//			console.log (response);	  < напечатать в консоли всю полученную информацию, включая служебную
+			console.log (response.data);	//< напечатать в консоли только запрошенные данные
+			console.log ('productPageTotal: '+ productPageTotal);
+			console.log ('productPageCurrent: '+ productPageCurrent);
+		});
+			 /*	Как только отработал колбэк, ангуляр подставляет изменённые данные в связанную HTML-страницу.	*/
 	};
 
 	$scope.loadProductsPage();	//< вызов описанной выше функции

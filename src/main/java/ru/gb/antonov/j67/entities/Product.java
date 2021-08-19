@@ -4,6 +4,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="products")
+//@NoArgsConstructor (access = AccessLevel.PROTECTED) < ломбок создаёт умолчальный конструктор, но непонятно, в чём выгода.
+//@Data     < ломбок генерит геттеры и сеттеры, которые годятся только для учебных проектов; имеет опцию, кажется, для статического конструктора.
 public class Product
 {
     public static final Double MIN_PRICE = 0.0;
@@ -21,7 +23,7 @@ public class Product
     private double cost;
 
 
-    protected Product(){}
+    protected Product(){}     //< эта строчка вдвое короче аннотации ломбока
 
     public static Product newProduct (String t, double c)
     {

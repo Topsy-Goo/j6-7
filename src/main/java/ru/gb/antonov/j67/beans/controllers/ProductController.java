@@ -19,6 +19,12 @@ public class ProductController
     private final ProductService productService;
     private int pageSize = 8;
 
+
+    //@Autowired < эта аннотация для конструктора необязательна
+    //public ProductController (ProductService ps)  < ломбок создаст этот конструктор
+    //{
+    //    productService = ps;
+    //}
 //--------------------------------------------------------------------
 
    //http://localhost:8189/market/products  POST
@@ -42,12 +48,14 @@ public class ProductController
         return toOptionalProductDto (productService.findById(id));
     }
 
+
     //http://localhost:8189/market/products/delete/11
     @GetMapping ("/products/delete/{id}")
     public void deleteById (@PathVariable Long id)
     {
         productService.deleteById (id);
     }
+
 
     //http://localhost:8189/market/products/page?p=0
     @GetMapping ("/products/page")
@@ -59,6 +67,7 @@ public class ProductController
 
         return productService.findAll (pageIndex, pageSize).map(ProductService::dtoFromProduct);
     }
+
 
     //http://localhost:8189/market/products?min=50&max=90
     //http://localhost:8189/market/products?min=50

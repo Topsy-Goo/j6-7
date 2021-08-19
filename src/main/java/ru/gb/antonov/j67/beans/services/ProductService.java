@@ -19,6 +19,12 @@ public class ProductService
     private final ProductRepo productRepo;
     private static int pageIndexLast = 0;
 
+
+    //@Autowired < эта аннотация для конструктора необязательна
+    //public ProductService (ProductRepo pr)    < ломбок создаст этот конструктор
+    //{
+    //    productRepo = pr;
+    //}
 //-----------------------------------------------------------------------
 
     public Product findById (Long id)
