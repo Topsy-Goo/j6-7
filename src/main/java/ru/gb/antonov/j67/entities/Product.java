@@ -1,5 +1,7 @@
 package ru.gb.antonov.j67.entities;
 
+import ru.gb.antonov.j67.beans.errorhandlers.ProductUpdatingException;
+
 import javax.persistence.*;
 
 @Entity
@@ -23,16 +25,17 @@ public class Product
     private double cost;
 
 
-    protected Product(){}     //< эта строчка вдвое короче аннотации ломбока
+    public Product(){}     //< эта строчка вдвое короче аннотации ломбока
 
-    public static Product newProduct (String t, double c)
+
+    public void update (String t, double c)
     {
-        Product p = new Product();
-
-        if (!p.setTitle(t) || !p.setCost(c))
-            throw new IllegalArgumentException();
-
-        return p;
+        if (!setTitle (t) || !setCost (c))
+        {
+            throw new ProductUpdatingException (String.format(
+                "Недопустимый набор значений:\r    название продукта = %s,\r    цена = %.2f.", t, c));
+                /*   Код для окон сообщений в Google Chrome писали идиоты. В результате, в них символ \t заменяется символом т, а символ \n — двойной кавычкой.   */
+        }
     }
 //----------------- Геттеры и сеттеры -----------------------------------
 

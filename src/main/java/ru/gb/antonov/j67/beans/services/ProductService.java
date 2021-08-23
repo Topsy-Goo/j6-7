@@ -1,15 +1,20 @@
 package ru.gb.antonov.j67.beans.services;
 
+import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.gb.antonov.j67.beans.errorhandlers.ProductUpdatingException;
+import ru.gb.antonov.j67.beans.errorhandlers.ResourceNotFoundException;
 import ru.gb.antonov.j67.beans.repos.ProductRepo;
 import ru.gb.antonov.j67.entities.Product;
 import ru.gb.antonov.j67.entities.dtos.ProductDto;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,15 +32,17 @@ public class ProductService
     //}
 //-----------------------------------------------------------------------
 
+    @NotNull
     public Product findById (Long id)
     {
-        return productRepo.findById(id).orElse(null);
+        String errMessage = "Не найден продукт с id = "+ id;
+        return productRepo.findById(id)
+                          .orElseThrow(()->new ResourceNotFoundException (errMessage));
     }
 
     public Page<Product> findAll (int pageIndex, int pageSize)
     {
         pageIndex = validatePageIndex (pageIndex, pageSize);
-
         return productRepo.findAll (PageRequest.of (pageIndex, pageSize));
     }
 
@@ -53,7 +60,25 @@ public class ProductService
         return Math.max(pageIndex, 0);
     }
 
-    public void deleteById (Long id)  {   productRepo.deleteById(id);   }
+    public void deleteById (Long id)
+    {
+        Product p = findById (id);  //< бросает ResourceNotFoundException
+        productRepo.delete(p);
+    }
+
+    public Product createProduct (String title, double cost)
+    {
+        Product p = new Product();
+        p.update (title, cost);     //< бросает ProductUpdatingException
+        return productRepo.save (p);
+    }
+
+    public Product updateProduct (long id, String title, double cost)
+    {
+        Product p = findById (id);  //< бросает ResourceNotFoundException
+        p.update (title, cost);     //< бросает ProductUpdatingException
+        return productRepo.save (p);
+    }
 
     public List<Product> getProductsByPriceRange (Integer min, Integer max)
     {
@@ -63,10 +88,6 @@ public class ProductService
         return productRepo.findAllByCostBetween (minPrice, maxPrice);
     }
 
-    public Product createProduct (String title, double cost)
-    {
-        return productRepo.save (Product.newProduct(title, cost));
-    }
 //--------- Методы для преобразований Product в ProductDto --------------
 
     public static ProductDto dtoFromProduct (Product product)
