@@ -6,8 +6,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="products")
-//@NoArgsConstructor (access = AccessLevel.PROTECTED) < ломбок создаёт умолчальный конструктор, но непонятно, в чём выгода.
-//@Data     < ломбок генерит геттеры и сеттеры, которые годятся только для учебных проектов; имеет опцию, кажется, для статического конструктора.
 public class Product
 {
     public static final Double MIN_PRICE = 0.0;
@@ -24,9 +22,7 @@ public class Product
     @Column(name="price")
     private double cost;
 
-
-    public Product(){}     //< эта строчка вдвое короче аннотации ломбока
-
+    public Product(){}
 
     public void update (String t, double c)
     {
@@ -34,7 +30,6 @@ public class Product
         {
             throw new ProductUpdatingException (String.format(
                 "Недопустимый набор значений:\r    название продукта = %s,\r    цена = %.2f.", t, c));
-                /*   Код для окон сообщений в Google Chrome писали идиоты. В результате, в них символ \t заменяется символом т, а символ \n — двойной кавычкой.   */
         }
     }
 //----------------- Геттеры и сеттеры -----------------------------------

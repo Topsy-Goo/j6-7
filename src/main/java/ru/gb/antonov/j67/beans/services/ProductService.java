@@ -2,11 +2,9 @@ package ru.gb.antonov.j67.beans.services;
 
 import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.gb.antonov.j67.beans.errorhandlers.ProductUpdatingException;
 import ru.gb.antonov.j67.beans.errorhandlers.ResourceNotFoundException;
 import ru.gb.antonov.j67.beans.repos.ProductRepo;
 import ru.gb.antonov.j67.entities.Product;
@@ -14,22 +12,15 @@ import ru.gb.antonov.j67.entities.dtos.ProductDto;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor    //< создаёт конструктор с параметрами для инициализации всех final-полей.
+@RequiredArgsConstructor
 public class ProductService
 {
     private final ProductRepo productRepo;
     private static int pageIndexLast = 0;
 
-
-    //@Autowired < эта аннотация для конструктора необязательна
-    //public ProductService (ProductRepo pr)    < ломбок создаст этот конструктор
-    //{
-    //    productRepo = pr;
-    //}
 //-----------------------------------------------------------------------
 
     @NotNull

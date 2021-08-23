@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-/*   Сообщение, которое отправлем клиенту, если его запрос некорректен.   */
 @Data
 @NoArgsConstructor
 public class ErrorMessage
