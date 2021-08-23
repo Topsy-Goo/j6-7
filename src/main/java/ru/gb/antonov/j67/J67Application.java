@@ -11,5 +11,4 @@ public class J67Application
     {
         SpringApplication.run (J67Application.class, args);
     }
-//1
 }

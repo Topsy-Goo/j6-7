@@ -18,18 +18,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor    //< создаёт конструктор с параметрами для инициализации всех final-полей.
+@RequiredArgsConstructor
 public class ProductService
 {
     private final ProductRepo productRepo;
     private static int pageIndexLast = 0;
 
-
-    //@Autowired < эта аннотация для конструктора необязательна
-    //public ProductService (ProductRepo pr)    < ломбок создаст этот конструктор
-    //{
-    //    productRepo = pr;
-    //}
 //-----------------------------------------------------------------------
 
     @NotNull
