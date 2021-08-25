@@ -9,8 +9,10 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
-	<!-- Урезанная версия ангулара — то что нужно: -->
+	<!-- Урезанная версия ангулара — то что нужно (это его база, но есть и дополнения): -->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+	<!-- Дполнение первое: роутер фронта. -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-route.min.js"></script>
 
 	<!-- Наш js-файл: -->
 	<script src="index.js"></script>
@@ -41,21 +43,25 @@
 			<td>{{p.productTitle}}</td>
 			<td>{{p.productCost}}</td>
 			<td>
-				<button class="btn btn-info"
-					title="Посмотреть информацию о продукт."
-					ng-click="infoProduct(p)">Посмотреть</button>
+				<button class="btn btn-info" style="font-family: Webdings;"
+					title="Посмотреть информацию о продукте."
+					ng-click="infoProduct(p)">s</button>
 				&nbsp;
-				<button class="btn btn-secondary"
+				<!--<button class="btn btn-secondary"
 					title="Уменьшить стоимость продукта на 1 руб."
 					ng-click="updateProductMinus(p)" style="width: 30pt">-</button>
 				&nbsp;
 				<button class="btn btn-secondary"
 					title="Увеличить стоимость продукта на 1 руб."
 					ng-click="updateProductPlus(p)" style="width: 30pt">+</button>
+				&nbsp;-->
+				<button class="btn btn-success" style="font-family: Webdings;"
+					title="Редактировать продукт."
+					ng-click="startEditProduct(p)">a</button>
 				&nbsp;
-				<button class="btn btn-danger"
+				<button class="btn btn-danger" style="font-family: Webdings;"
 					title="Удалить продукт."
-					ng-click="deleteProduct(p.productId)">Удалить</button>
+					ng-click="deleteProduct(p.productId)">r</button>
 			</td>
 		</tr>
 		<!-- Объект productsPage (тип Page) содержит много полезной информации: -->
@@ -66,9 +72,9 @@
 		</caption>
 	</table>
 
-	<h2>Создать продукт:</h2>
+	<h2>Создать/изменить продукт:</h2>
 		<p></p>
-	<form novalidate ng-submit="createNewProduct()">
+	<form novalidate ng-submit="createOrUpdateProduct()" ng-reset="resetForm()">
 
 		<div class="container" style="font-size: 14pt; font-weight:500;">
 			<div class="row">
@@ -80,8 +86,6 @@
 					<input	id="pid"
 							class="form-control"
 							type="number"
-							value="{{newProductId}}"
-							disabled
 							readonly
 							ng-model="new_product.productId">
 				</div>
@@ -93,8 +97,8 @@
 				</div>
 				<div class="col-10">
 					<input	id="pnm"
-							type="text"
 							class="form-control"
+							type="text"
 							placeholder="—"
 							required="required"
 							ng-model="new_product.productTitle">
@@ -107,20 +111,25 @@
 				</div>
 				<div class="col-10">
 					<input	id="pct"
-							type="number"
 							class="form-control"
+							type="number"
 							placeholder="—"
 							required="required"
-							min="0"
 							ng-model="new_product.productCost">
 				</div>
 			</div>
 		</div>
 		<p></p>
 		<button type="submit" class="btn btn-primary">Применить</button>
+		&nbsp;
+		<button type="reset" class="btn btn-secondary">Отмена</button>
 	</form>
 
 </div>
 
 </body>
 </html>
+<!--
+ng-show	-	показывать элемент или нет
+
+-->

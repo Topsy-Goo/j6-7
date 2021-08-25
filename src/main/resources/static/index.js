@@ -17,6 +17,8 @@ angular.module('market-front', []).controller('indexController', function ($scop
 	var productPageCurrent = 0;
 	var productPageTotal = 0;	//< такая переменная не видна в HTML-файле
 	$scope.newProductId = 0;	//< такая переменная    видна в HTML-файле
+	$scope.newProducTitle = "";
+	$scope.newProductCost = 0;
 
 /*----------------------------------------------------------------------------------------*/
 
@@ -51,6 +53,30 @@ angular.module('market-front', []).controller('indexController', function ($scop
 			 /*	Как только отработал колбэк, ангуляр подставляет изменённые данные в связанную HTML-страницу.	*/
 	};
 
+	function CopyOfProductDto (p)
+	{
+		this.productId		= p.productId;
+		this.productTitle	= p.productTitle;
+		this.productCost	= p.productCost;
+	}
+
+	$scope.startEditProduct = function (p)
+	{
+		$scope.new_product = new CopyOfProductDto (p);
+	}
+
+	$scope.createOrUpdateProduct = function ()
+	{
+		if ($scope.new_product.productId == null)
+		{
+			$scope.createNewProduct();
+		}
+		else
+		{
+			$scope.putProduct ($scope.new_product);
+		}
+	}
+
 	$scope.createNewProduct = function ()
 	{
 		$http.post (contextProductPath, $scope.new_product)
@@ -58,12 +84,32 @@ angular.module('market-front', []).controller('indexController', function ($scop
 		function successCallback (response)
 		{
 			$scope.loadProductsPage();
-			$scope.new_product = null;	//< сбросит содержимое формы
+			$scope.resetForm();
 		},
 		function failureCallback (response)
 		{
 			alert(response.data.messageText);	// Имя параметра должно совпадать с именем поля в передаваемом объекте, коим в данном случае выступает ru.gb.antonov.j67.beans.errorhandlers.ErrorMessage.
 		});
+	}
+
+	$scope.putProduct = function (p)
+	{
+		$http.put (contextProductPath, p)
+		.then(
+		function successCallback (response)
+		{
+			$scope.loadProductsPage();
+			$scope.resetForm();
+		},
+		function failureCallback (response)
+		{
+			alert(response.data.messageText);
+		});
+	}
+
+	$scope.resetForm = function()
+	{
+		$scope.new_product = null;	//< сбросит содержимое формы
 	}
 
 	$scope.deleteProduct = function (id)
@@ -90,24 +136,6 @@ angular.module('market-front', []).controller('indexController', function ($scop
 	{
 		productPageCurrent ++;
 		$scope.loadProductsPage();
-	}
-
-	$scope.updateProductMinus = function (p)	{	$scope.putProduct(p, -1);	}
-	$scope.updateProductPlus = function (p)		{	$scope.putProduct(p, 1);	}
-
-	$scope.putProduct = function (p, step)
-	{
-		let oldCost = p.productCost;
-
-		p.productCost += step;
-		$http.put (contextProductPath, p)
-		.then(
-		function successCallback (response){$scope.loadProductsPage();},
-		function failureCallback (response)
-		{
-			alert(response.data.messageText);
-			p.productCost = oldCost;
-		});
 	}
 /*----------------------------------------------------------------------------------------*/
 

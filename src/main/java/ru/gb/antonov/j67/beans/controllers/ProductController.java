@@ -1,11 +1,8 @@
 package ru.gb.antonov.j67.beans.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-import ru.gb.antonov.j67.beans.errorhandlers.ProductUpdatingException;
-import ru.gb.antonov.j67.beans.errorhandlers.ResourceNotFoundException;
 import ru.gb.antonov.j67.beans.services.ProductService;
 import ru.gb.antonov.j67.entities.Product;
 import ru.gb.antonov.j67.entities.dtos.ProductDto;
