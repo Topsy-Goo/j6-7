@@ -1,11 +1,10 @@
-
 angular.module('market-front', []).controller('indexController', function ($scope, $http)
 {
 /*	anguler.module - создание приложения.
 
 	('market-front', [ ]) - название приложения и список модулей-зависимостей (отсутствие скобок означает не создание пиложения, а поиск существующего).
 
-	controller - создаём контроллер.
+	controller('indexController',…	- создаём контроллер и даём ему указанное имя.
 
 	function ($scope, $http) - инжектим модули, которые входят в стандартную поставку ангуляра:
 	 - $http - позволяет посылать из приложения http-запросы
@@ -14,13 +13,14 @@ angular.module('market-front', []).controller('indexController', function ($scop
 
 	const contextProductPath = 'http://localhost:8189/market/api/v1/products';	//< Для удобства составления адресов
 
-	var productPageCurrent = 0;
-	var productPageTotal = 0;	//< такая переменная не видна в HTML-файле
 	$scope.newProductId = 0;	//< такая переменная    видна в HTML-файле
 	$scope.newProducTitle = "";
 	$scope.newProductCost = 0;
 
-/*----------------------------------------------------------------------------------------*/
+	var productPageCurrent = 0;
+	var productPageTotal = 0;	//< такая переменная не видна в HTML-файле
+
+//----------------------------------------------------------------------------------------
 
 /*	Так выполняется GET-запрос в приложение. Если этот запрос нужно выполянть из HTML-файла, то его придётся поместить в функцию (см.след.пример).
 
@@ -28,9 +28,9 @@ angular.module('market-front', []).controller('indexController', function ($scop
 		 .then (function (response)
 		 {
 		 	//...
-		 });
+		 });	*/
 
-	Описание функции (для функций $scope. и var используются также, как для переменных):	*/
+/*	Типовое (для этого проекта) описание функции в js (для функций $scope. и var используются также, как для переменных):	*/
 	$scope.loadProductsPage = function ()
 	{
 		$http
@@ -50,8 +50,46 @@ angular.module('market-front', []).controller('indexController', function ($scop
 			console.log ('productPageTotal: '+ productPageTotal);
 			console.log ('productPageCurrent: '+ productPageCurrent);
 		});
-			 /*	Как только отработал колбэк, ангуляр подставляет изменённые данные в связанную HTML-страницу.	*/
+		//Как только отработал колбэк, ангуляр подставляет изменённые данные в связанную HTML-страницу.
 	};
+
+	$scope.prevProductsPage = function ()
+	{
+		productPageCurrent --;
+		$scope.loadProductsPage();
+	}
+
+	$scope.nextProductsPage = function ()
+	{
+		productPageCurrent ++;
+		$scope.loadProductsPage();
+	}
+
+	$scope.deleteProduct = function (id)
+	{
+		$http.get (contextProductPath + '/delete/' + id)
+			 .then (function (response)
+			 {
+			 	$scope.loadProductsPage();
+			 });
+	}
+
+	$scope.infoProduct = function (p)
+	{
+		$http.get (contextProductPath + '/' + p.productId)
+		.then (
+		function successCallback (response)
+		{
+//			console.log (response.data);
+			alert('id: ' + response.data.productId +
+				  '\rНазвание: '+ response.data.productTitle +
+				  '\rЦена: '+ response.data.productCost);
+		},
+		function failureCallback (response)
+		{
+			alert(response.data.messageText);
+		});
+	}
 
 	function CopyOfProductDto (p)
 	{
@@ -112,35 +150,19 @@ angular.module('market-front', []).controller('indexController', function ($scop
 		$scope.new_product = null;	//< сбросит содержимое формы
 	}
 
-	$scope.deleteProduct = function (id)
-	{
-		$http.get (contextProductPath + '/delete/' + id)
-			 .then (function (response)
-			 {
-			 	$scope.loadProductsPage();
-			 });
-	}
+//    $scope.generatePagesIndexes = function (startPage, endPage)
+//    {
+//        let arr = [];
+//        for (let i = startPage; i < endPage + 1; i++)
+//        {
+//            arr.push(i);
+//        }
+//        return arr;
+//    }
 
-	$scope.infoProduct = function (p)
-	{
-		alert('id: ' + p.productId + ', Title: '+ p.productTitle + ', Price: '+ p.productCost);
-	}
-
-	$scope.prevProductsPage = function ()
-	{
-		productPageCurrent --;
-		$scope.loadProductsPage();
-	}
-
-	$scope.nextProductsPage = function ()
-	{
-		productPageCurrent ++;
-		$scope.loadProductsPage();
-	}
 /*----------------------------------------------------------------------------------------*/
 
 	$scope.loadProductsPage();	//< вызов описанной выше функции
 
-
-});
+}); //< НЕ ЗАБЫВАЕМ СЧИТАТЬ СКОБКИ!!
 
