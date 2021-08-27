@@ -1,11 +1,14 @@
-package ru.gb.antonov.j67;
+package ru.gb.antonov.j67.beans.cart;
 
+import org.springframework.stereotype.Component;
 import ru.gb.antonov.j67.beans.services.ProductService;
 import ru.gb.antonov.j67.entities.Product;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
+@Component
 public class ShoppingCart
 {
     private final List<Product> products;
@@ -13,7 +16,7 @@ public class ShoppingCart
 
     public ShoppingCart()
     {
-        products = ProductService.getEmptyProductList();
+        products = new LinkedList<>();
     }
 
     public List<Product> getProducts()

@@ -1,13 +1,14 @@
 package ru.gb.antonov.j67.beans.services;
 
 import com.sun.istack.NotNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.gb.antonov.j67.ShoppingCart;
+import ru.gb.antonov.j67.beans.cart.ShoppingCart;
 import ru.gb.antonov.j67.beans.errorhandlers.ResourceNotFoundException;
 import ru.gb.antonov.j67.beans.repos.ProductRepo;
 import ru.gb.antonov.j67.entities.Product;
@@ -19,20 +20,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-//@RequiredArgsConstructor    //< создаёт конструктор с параметрами для инициализации всех final-полей.
+@RequiredArgsConstructor    //< создаёт конструктор с параметрами для инициализации всех final-полей.
 public class ProductService
 {
     private final ProductRepo productRepo;
-    private static int pageIndexLast = 0;
     private final ShoppingCart cart;
+    private static int pageIndexLast = 0;
 
 
-    @Autowired //< эта аннотация для конструктора необязательна
-    public ProductService (ProductRepo pr)
+    /*@Autowired //< эта аннотация для конструктора необязательна
+    public ProductService (ProductRepo pr, ShoppingCart c)
     {
         productRepo = pr;
-        cart = new ShoppingCart();
-    }
+        cart = c;
+    }*/
 //-----------------------------------------------------------------------
 
     @NotNull
@@ -108,11 +109,6 @@ public class ProductService
         double maxPrice = max != null ? max.doubleValue() : Product.MAX_PRICE;
 
         return productRepo.findAllByCostBetween (minPrice, maxPrice);
-    }
-
-    public static List<Product> getEmptyProductList()
-    {
-        return new LinkedList<>();
     }
 
     public Integer addToCart (Long pid)
