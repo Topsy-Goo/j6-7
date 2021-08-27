@@ -67,7 +67,7 @@ public class ProductController
 
     //http://localhost:8189/market/api/v1/products/delete/11
     @GetMapping ("/delete/{id}")
-    public void deleteById (@PathVariable Long id)
+    public void deleteProductById (@PathVariable Long id)
     {
         productService.deleteById (id);
     }
@@ -84,6 +84,36 @@ public class ProductController
         return productListToDtoList (productService.getProductsByPriceRange(min, max));
     }
 
+    //http://localhost:8189/market/api/v1/products/addtocart/18
+    @GetMapping ("/addtocart/{id}")
+    public Integer addProductToCart (@PathVariable Long id)
+    {
+        return productService.addToCart (id);
+    }
+
+
+    //http://localhost:8189/market/api/v1/products/removefromcart/18
+    @GetMapping ("/removefromcart/{id}")
+    public Integer removeProductFromCart (@PathVariable Long id)
+    {
+        return productService.removeFromCart (id);
+    }
+
+    //http://localhost:8189/market/api/v1/products/cartpage
+    //http://localhost:8189/market/api/v1/products/cartpage?p=0
+    @GetMapping ("/cartpage")
+    public Page<ProductDto> getProductsCartPage (
+                   @RequestParam (defaultValue="0", name="p", required = false) Integer pageIndex)
+    {
+        return productService.getCartPage (pageIndex, pageSize).map(ProductService::dtoFromProduct);
+    }
+
+    //http://localhost:8189/market/api/v1/products/cartitemscount
+    @GetMapping ("/cartitemscount")
+    public Integer getCartItemsCount()
+    {
+        return productService.getCartItemsCount();
+    }
 
     private static Optional<ProductDto> toOptionalProductDto (Product p)
     {

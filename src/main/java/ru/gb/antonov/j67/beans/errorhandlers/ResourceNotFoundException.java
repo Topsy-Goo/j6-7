@@ -5,5 +5,5 @@ public class ResourceNotFoundException extends RuntimeException
     public ResourceNotFoundException (String messageText)
     {
         super (messageText);
-    }
+    }//1
 }

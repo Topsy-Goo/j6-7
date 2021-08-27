@@ -17,5 +17,5 @@ public class ErrorMessage
     {
         messageText = text;
         date = new Date();
-    }
+    }//1
 }

@@ -1,0 +1,60 @@
+<div>
+	<h5>Каталог продуктов</h5>
+		<p></p>
+
+	<table class="table">
+		<tr><th>id</th><th>title</th><th>cost</th><th>add to cart</th><th>more actions</th></tr>
+
+		<tr ng-repeat="p in productsPage.content">
+			<td>{{p.productId}}</td>
+			<td>{{p.productTitle}}</td>
+			<td>{{p.productCost}}</td>
+			<td>
+				<button class="btn btn-primary"
+					title="Добавить продукт в корзину." style="width: 30pt"
+					ng-click="addToCart(p.productId)">+</button>
+				&nbsp;
+				<button class="btn btn-primary"
+					title="Убрать продукт из корзины." style="width: 30pt"
+					ng-click="removeFromCart(p.productId)">-</button>
+			</td>
+			<td>
+				<button class="btn btn-info" style="font-family: Webdings;"
+					title="Посмотреть информацию о продукте."
+					ng-click="infoProduct(p)">s</button>
+				&nbsp;
+				<button class="btn btn-success" style="font-family: Webdings;"
+					title="Редактировать продукт."
+					ng-click="startEditProduct(p.productId)">a</button>
+				&nbsp;
+				<button class="btn btn-danger" style="font-family: Webdings;"
+					title="Удалить продукт."
+					ng-click="deleteProduct(p.productId)">r</button>
+			</td>
+		</tr>
+		<caption>
+			Всего товаров: {{productsPage.totalElements}}&nbsp;&nbsp;•&nbsp;&nbsp;
+			Элементов на странице макс.: {{productsPage.pageable.pageSize}}&nbsp;&nbsp;•&nbsp;&nbsp;
+			Страница: {{productsPage.pageable.pageNumber +1}}/{{productsPage.totalPages}}
+			<br>
+			Товаров в корзине: {{cartItemsCount}}
+		</caption>
+	</table>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+
+        	<li class="page-item" style="padding-right: 3px;">
+        		<button class="page-link" ng-click="prevProductsPage()">&lt;</button>
+			</li>
+            <li class="page-item" ng-repeat="pageIndex in paginationArray" style="padding-right: 3px;">
+                <button class="page-link" ng-click="loadProducts(pageIndex)">{{pageIndex}}</button>
+            </li>
+            <li class="page-item" style="padding-right: 3px;">
+        		<button class="page-link" ng-click="nextProductsPage()">&gt;</button>
+			</li>
+
+        </ul>
+    </nav>
+
+</div>

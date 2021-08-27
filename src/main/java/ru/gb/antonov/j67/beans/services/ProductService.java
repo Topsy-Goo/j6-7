@@ -1,35 +1,38 @@
 package ru.gb.antonov.j67.beans.services;
 
 import com.sun.istack.NotNull;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Example;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.gb.antonov.j67.beans.errorhandlers.ProductUpdatingException;
+import ru.gb.antonov.j67.ShoppingCart;
 import ru.gb.antonov.j67.beans.errorhandlers.ResourceNotFoundException;
 import ru.gb.antonov.j67.beans.repos.ProductRepo;
 import ru.gb.antonov.j67.entities.Product;
 import ru.gb.antonov.j67.entities.dtos.ProductDto;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor    //< создаёт конструктор с параметрами для инициализации всех final-полей.
+//@RequiredArgsConstructor    //< создаёт конструктор с параметрами для инициализации всех final-полей.
 public class ProductService
 {
     private final ProductRepo productRepo;
     private static int pageIndexLast = 0;
+    private final ShoppingCart cart;
 
 
-    //@Autowired < эта аннотация для конструктора необязательна
-    //public ProductService (ProductRepo pr)    < ломбок создаст этот конструктор
-    //{
-    //    productRepo = pr;
-    //}
+    @Autowired //< эта аннотация для конструктора необязательна
+    public ProductService (ProductRepo pr)
+    {
+        productRepo = pr;
+        cart = new ShoppingCart();
+    }
 //-----------------------------------------------------------------------
 
     @NotNull
@@ -42,13 +45,32 @@ public class ProductService
 
     public Page<Product> findAll (int pageIndex, int pageSize)
     {
-        pageIndex = validatePageIndex (pageIndex, pageSize);
+        pageIndex = validatePageIndex (pageIndex, pageSize, productRepo.count());
         return productRepo.findAll (PageRequest.of (pageIndex, pageSize));
     }
 
-    private int validatePageIndex (int pageIndex, int pageSize)
+    public Page<Product> getCartPage (int pageIndex, int pageSize)
     {
-        long productsCount = productRepo.count();
+        List<Product> list = cart.getProducts();
+        int length = list.size();
+
+        pageIndex = validatePageIndex (pageIndex, pageSize, length);
+
+        int fromIndex = pageSize * pageIndex;
+        int toIndex = fromIndex + pageSize;
+        if (toIndex > length)
+            toIndex = length;
+
+        Page<Product> page = new PageImpl<>(
+                                    list.subList(fromIndex, toIndex),
+                                    PageRequest.of (pageIndex, pageSize),
+                                    length);
+        Pageable pageable = page.getPageable();
+        return page;
+    }
+
+    private int validatePageIndex (int pageIndex, int pageSize, long productsCount)
+    {
         int pagesCount    = (int)(productsCount / pageSize);
 
         if (productsCount % pageSize > 0)
@@ -86,6 +108,28 @@ public class ProductService
         double maxPrice = max != null ? max.doubleValue() : Product.MAX_PRICE;
 
         return productRepo.findAllByCostBetween (minPrice, maxPrice);
+    }
+
+    public static List<Product> getEmptyProductList()
+    {
+        return new LinkedList<>();
+    }
+
+    public Integer addToCart (Long pid)
+    {
+        cart.addToCart (findById (pid));
+        return cart.getItemsCount();
+    }
+
+    public Integer removeFromCart (Long pid)
+    {
+        cart.removeFromCart (findById(pid));
+        return cart.getItemsCount();
+    }
+
+    public Integer getCartItemsCount()
+    {
+        return cart.getItemsCount();
     }
 
 //--------- Методы для преобразований Product в ProductDto --------------

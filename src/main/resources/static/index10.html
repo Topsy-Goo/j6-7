@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Marketplace</title>
+
+<!-- Эти ссылки подключают библиотеку стилей из https://getbootstrap.com/docs. -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+	<!-- Урезанная версия ангулара — то что нужно (это его база, но есть и дополнения): -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+	<!-- Дполнение первое: роутер фронта. -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-route.min.js"></script>
+
+</head>
+<!-- ng-app - атрибут указывает, каким приложением управляется помеченный им элемент и все вложенные в него элементы. -->
+<body ng-app="market-front">
+
+<div class="container">
+
+	<div ng-controller="indexController">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link" href="#!/main">{{mainPageTitle}}</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#!/store">{{storePageTitle}}</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#!/edit_product">{{edit_productPageTitle}}</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#!/cart">{{cartPageTitle}}</a>
+					</li>
+<!--					<li class="nav-item">-->
+<!--						<a class="nav-link" href="#!">{{}}</a>-->
+<!--					</li>-->
+				</ul>
+			</div>
+		</nav>
+		<h1>{{appTitle}}</h1>
+		<p></p>
+	</div>
+
+	<!--	Блок ng-view будет служить плейсхолдером, вместо которого мы будем показывать различные html-файлы нашего приложения. (Эти html-файлы должны содержать ТОЛЬКО div-блок с наполнением и не должны содержать тэги <html>, <head> и <body>.)	-->
+	<ng-view>
+
+	</ng-view>
+
+
+	<!-- Здесь указываем js-файлы всех модулей, которые планируем подставлять вместо блока <ng-view>. -->
+	<script src="index10.js"></script>
+	<script src="main/main.js"></script>
+	<script src="store/store.js"></script>
+	<script src="edit_product/edit_product.js"></script>
+	<script src="cart/cart.js"></script>
+
+</div>
+</body>
+</html>
+<!--
+ng-show	-	показывать элемент или нет
+
+-->

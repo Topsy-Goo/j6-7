@@ -3,6 +3,7 @@ package ru.gb.antonov.j67.entities;
 import ru.gb.antonov.j67.beans.errorhandlers.ProductUpdatingException;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name="products")
@@ -25,8 +26,7 @@ public class Product
     private double cost;
 
 
-    public Product(){}     //< эта строчка вдвое короче аннотации ломбока
-
+    public Product(){}
 
     public void update (String t, double c)
     {
@@ -34,7 +34,6 @@ public class Product
         {
             throw new ProductUpdatingException (String.format(
                 "Недопустимый набор значений:\r    название продукта = %s,\r    цена = %.2f.", t, c));
-                /*   Код для окон сообщений в Google Chrome писали идиоты. В результате, в них символ \t заменяется символом т, а символ \n — двойной кавычкой.   */
         }
     }
 //----------------- Геттеры и сеттеры -----------------------------------
@@ -71,5 +70,18 @@ public class Product
     {
         return cost >= MIN_PRICE  &&  cost <= MAX_PRICE;
     }
+
+    public String toString()
+    {
+        return String.format("[id:%d, «%s», %.2f]", id, title, cost);
+    }
+
+    @Override public boolean equals (Object o)
+    {
+        Product p = (Product) o;
+        return p!=null && this.id.equals(p.getId());
+    }
+
+    @Override public int hashCode()    {   return Objects.hash(id);   }
 
 }
