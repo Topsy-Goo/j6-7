@@ -8,7 +8,6 @@ angular.module('market-front').controller('cartController', function ($scope, $h
 	$scope.getCartItemsCount = function()
 	{
 		$http.get (contextProductPath + '/cartitemscount')
-
 		.then (
 		function successCallback (response)
 		{
@@ -16,7 +15,7 @@ angular.module('market-front').controller('cartController', function ($scope, $h
 		},
 		function failureCallback (response)
 		{
-			alert (response.data.messageText);
+			alert (response.data.messages);	//< название параметра взято из ErrorMessage
 		});
 	}
 
@@ -37,9 +36,7 @@ angular.module('market-front').controller('cartController', function ($scope, $h
 			cartPageTotal = $scope.productsPage.totalPages;
 
 			$scope.paginationArray = $scope.generatePagesIndexes(1, cartPageTotal);
-		/*	console.log (response.data);
-			console.log ('cartPageTotal: '+ cartPageTotal);
-			console.log ('cartPageCurrent: '+ cartPageCurrent);*/
+
 		});
 	};
 
@@ -73,13 +70,12 @@ angular.module('market-front').controller('cartController', function ($scope, $h
 
 	$scope.infoProduct = function (p)
 	{
-		alert('id: ' + p.productId + ', Title: '+ p.productTitle + ', Price: '+ p.productCost);
+		alert('id: ' + p.productId + ',\rназвание: '+ p.productTitle + ',\tцена: '+ p.productCost);
 	}
 
 	$scope.addToCart = function (pid)
 	{
-		console.log ('addToCart.pid: '+ pid);
-
+//		console.log ('addToCart.pid: '+ pid);
 		$http.get (contextProductPath + '/addtocart/' + pid)
 		.then (
 		function successCallback (response)
@@ -88,7 +84,7 @@ angular.module('market-front').controller('cartController', function ($scope, $h
 		},
 		function failureCallback (response)
 		{
-			alert ('Не удалось добавить продукт в корзину.\r'+ response.data.messageText);
+			alert ('Не удалось добавить продукт в корзину:\r'+ response.data.messages);	//< название параметра взято из ErrorMessage
 		});
 	}
 
@@ -104,7 +100,7 @@ angular.module('market-front').controller('cartController', function ($scope, $h
 			},
 			function failureCallback (response)
 			{
-				alert (response.data.messageText);
+				alert ('Не удалось удалить продукт из корзины:\r'+ response.data.messages);	//< название параметра взято из ErrorMessage
 			});
 		}
 	}

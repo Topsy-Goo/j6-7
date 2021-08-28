@@ -87,7 +87,7 @@ angular.module('market-front', []).controller('indexController', function ($scop
 		},
 		function failureCallback (response)
 		{
-			alert(response.data.messageText);
+			alert(response.data.messages);	//< название параметра взято из ErrorMessage
 		});
 	}
 
@@ -126,7 +126,7 @@ angular.module('market-front', []).controller('indexController', function ($scop
 		},
 		function failureCallback (response)
 		{
-			alert(response.data.messageText);	// Имя параметра должно совпадать с именем поля в передаваемом объекте, коим в данном случае выступает ru.gb.antonov.j67.beans.errorhandlers.ErrorMessage.
+			alert(response.data.messages);	// Имя параметра должно совпадать с именем поля в передаваемом объекте, коим в данном случае выступает ru.gb.antonov.j67.beans.errorhandlers.ErrorMessage.
 		});
 	}
 
@@ -141,7 +141,7 @@ angular.module('market-front', []).controller('indexController', function ($scop
 		},
 		function failureCallback (response)
 		{
-			alert(response.data.messageText);
+			alert(response.data.messages);	//< название параметра взято из ErrorMessage
 		});
 	}
 

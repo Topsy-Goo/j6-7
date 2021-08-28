@@ -20,5 +20,11 @@ public class GlobalExceptionHandler
     public ResponseEntity<?> catchProductUpdatingException (ProductUpdatingException e)
     {
         return new ResponseEntity<>(new ErrorMessage (e.getMessage()), HttpStatus.BAD_REQUEST);
-    }//1
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> catchOurValidationException (OurValidationException e)
+    {
+        return new ResponseEntity<>(new ErrorMessage (e.getMessages()), HttpStatus.BAD_REQUEST);
+    }
 }

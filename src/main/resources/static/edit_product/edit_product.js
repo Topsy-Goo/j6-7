@@ -30,13 +30,18 @@ angular.module('market-front').controller('edit_productController', function ($s
 			},
 			function failureCallback (response)
 			{
-				alert ('Не удалось получить информацию о продукте. '+ response.data.messageText);
+				alert ('Не удалось получить информацию о продукте.\r'+ response.data.messages);	//< название параметра взято из ErrorMessage
 			});
 		}
 	}
 
 	$scope.createOrUpdateProduct = function ()
 	{
+		if ($scope.new_product == null)
+		{
+			alert ('\rвсё хорошо?');
+		}
+		else
 		if ($scope.new_product.productId == null)
 		{
 			$scope.createNewProduct ($scope.new_product);
@@ -53,13 +58,14 @@ angular.module('market-front').controller('edit_productController', function ($s
 		.then (
 		function successCallback (response)
 		{
-			$scope.contextPrompt = 'Продукт успешно создан.';
+			$scope.contextPrompt = 'Продукт успешно создан';
 			$scope.new_product = response.data;	//< показываем хар-ки товара, полученные от бэкэнда (включая id)
 			// остаёмся на странице, чтобы дать возможность юзеру внести правки
 		},
 		function failureCallback (response)
 		{
-			alert (response.data.messageText);	// Имя параметра должно совпадать с именем поля в передаваемом объекте, коим в данном случае выступает ru.gb.antonov.j67.beans.errorhandlers.ErrorMessage.
+			$scope.contextPrompt = 'Не удалось создать продукт';
+			alert (response.data.messages);	// Имя параметра должно совпадать с именем поля в передаваемом объекте, коим в данном случае выступает ru.gb.antonov.j67.beans.errorhandlers.ErrorMessage.
 		});
 	}
 
@@ -69,13 +75,14 @@ angular.module('market-front').controller('edit_productController', function ($s
 		.then(
 		function successCallback (response)
 		{
-			$scope.contextPrompt = 'Продукт успешно обновлён.';
+			$scope.contextPrompt = 'Продукт успешно изменён';
 			$scope.new_product = response.data;	//< показываем хар-ки товара, полученные от бэкэнда
 			// остаёмся на странице, чтобы дать возможность юзеру внести правки
 		},
 		function failureCallback (response)
 		{
-			alert (response.data.messageText);
+			$scope.contextPrompt = 'Не удалось изменить продукт';
+			alert (response.data.messages);	//< название параметра взято из ErrorMessage
 		});
 	}
 

@@ -1,14 +1,21 @@
 package ru.gb.antonov.j67.beans.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.gb.antonov.j67.beans.errorhandlers.OurValidationException;
+import ru.gb.antonov.j67.beans.errorhandlers.ResourceNotFoundException;
 import ru.gb.antonov.j67.beans.services.ProductService;
 import ru.gb.antonov.j67.entities.Product;
 import ru.gb.antonov.j67.entities.dtos.ProductDto;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static ru.gb.antonov.j67.beans.services.ProductService.productListToDtoList;
 
@@ -46,8 +53,22 @@ public class ProductController
 
    //http://localhost:8189/market/api/v1/products   POST
     @PostMapping
-    public Optional<ProductDto> createProduct (@RequestBody ProductDto pdto)
+    public Optional<ProductDto> createProduct (@RequestBody @Validated ProductDto pdto, BindingResult br)
     {
+/*
+Нельзя изменять последовательность следующих параметров:
+    @Validated ProductDto pdto, BindingResult br
+Спрингу проверит параметр ProductDto pdto, и по результатам этой проверки заполнит BindingResult br. Состояние BindingResult после проверки проверяем мы:
+*/
+        if (br.hasErrors())
+        {
+            throw new OurValidationException (
+                        //преобразуем набор ошибок в список сообщений, и пакуем в одно общее исключение (в наше заранее для это приготовленное исключение).
+                        br.getAllErrors()
+                          .stream()
+                          .map(ObjectError::getDefaultMessage)
+                          .collect (Collectors.toList()));
+        }
         Product p = productService.createProduct (pdto.getProductTitle(),
                                                   pdto.getProductCost());
         return toOptionalProductDto (p);

@@ -3,19 +3,37 @@ package ru.gb.antonov.j67.beans.errorhandlers;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /*   Сообщение, которое отправлем клиенту, если его запрос некорректен.   */
 @Data
 @NoArgsConstructor
 public class ErrorMessage
 {
-    private String messageText;
-    private Date   date;
+    private List<String> messages;
+    private Date         date;
+
+//---------------- конструкторы -----------------------------------
+
+    public ErrorMessage (List<String> strings)
+    {
+        messages = strings;
+        date = new Date();
+    }
 
     public ErrorMessage (String text)
     {
-        messageText = text;
-        date = new Date();
-    }//1
+        this (List.of(text));
+    }
+
+    public ErrorMessage (String ... messages)
+    {
+        this (Arrays.asList(messages));
+    }
+//---------------- геттеры и сесстеры -----------------------------
+
+    public List<String> getMessages() {   return Collections.unmodifiableList (messages);   }
 }

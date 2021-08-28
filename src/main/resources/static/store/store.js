@@ -16,7 +16,6 @@ angular.module('market-front').controller('storeController', function ($scope, $
 	var productPageCurrent = 0;
 	var productPageTotal = 0;	//< такая переменная не видна в HTML-файле
 	$scope.cartItemsCount = 0;	//< такая переменная    видна в HTML-файле
-//	let currentPageIndex = 1;
 
 	$scope.getCartItemsCount = function()
 	{
@@ -28,7 +27,7 @@ angular.module('market-front').controller('storeController', function ($scope, $
 		},
 		function failureCallback (response)
 		{
-			alert (response.data.messageText);
+			alert (response.data.messages);	//< название параметра взято из ErrorMessage
 		});
 	}
 
@@ -124,7 +123,7 @@ angular.module('market-front').controller('storeController', function ($scope, $
 		},
 		function failureCallback (response)
 		{
-			alert ('Не удалось добавить продукт в корзину.\r'+ response.data.messageText);
+			alert ('Не удалось добавить продукт в корзину.\r'+ response.data.messages);	//< название параметра взято из ErrorMessage
 		});
 	}
 
@@ -144,7 +143,7 @@ angular.module('market-front').controller('storeController', function ($scope, $
 			},
 			function failureCallback (response)
 			{
-				alert (response.data.messageText);
+				alert (response.data.messages);	//< название параметра взято из ErrorMessage
 			});
 		}
 	}
