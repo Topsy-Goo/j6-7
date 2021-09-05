@@ -37,14 +37,7 @@ public class OurUserDetailsService implements UserDetailsService
         String errMsg = String.format ("Логин (%s) не зарегистрирован.", login);
         OurUser ourUser = findByLogin(login)
                             .orElseThrow(()->new UsernameNotFoundException (errMsg));
-                            //^ должно отправлять err.401 клиенту, но не отправляет, а пишет
-                            // в консоль IDE. Регистрация в GlobalExceptionHandler не помогла.
-                            // В общем, зарегистрированный юзер при перезапуске приложения не
-                            // вызывает 401, а вызывает обычное исключение.
-                            // И JwtRequestFilter.doFilterInternal ругается.
 
-        //Заполняем и возвращаем спринговую версию юзера (у него есть ещё более подробный
-        // конструктор)
         return new User(ourUser.getLogin(),
                         ourUser.getPassword(),
                         mapRolesToAuthorities (ourUser.getRoles()));
@@ -64,9 +57,8 @@ public class OurUserDetailsService implements UserDetailsService
 
         if (optionalRole.isPresent())
         {
-            OurUser saved = ourUserRepo.save (dummyUser); //< is always 'not null' when returned
-            saved.addRole (optionalRole.get()); //< как оказалось, создать для нового юзера
-            // запись в сводной таблице можно просто добавив сущность-роль в список ролей юзера
+            OurUser saved = ourUserRepo.save (dummyUser);
+            saved.addRole (optionalRole.get());
             return Optional.of (saved);
         }
         return Optional.empty();

@@ -15,7 +15,7 @@ angular.module('market-front').controller('cartController', function ($scope, $h
 		},
 		function failureCallback (response)
 		{
-			alert (response.data.messages);	//< название параметра взято из ErrorMessage
+			alert (response.data.messages);
 		});
 	}
 
@@ -103,7 +103,6 @@ angular.module('market-front').controller('cartController', function ($scope, $h
 			});
 		}
 	}
-//----------------------------------------------------------------------------------------
 
 	$scope.loadProductsPage();
 });

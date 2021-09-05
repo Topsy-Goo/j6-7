@@ -21,4 +21,4 @@ public class RegisterRequest
     @NotNull (message="укажите адрес электронной почты (до 64 символов)\r")
     @Length (min=5, max=64, message="длина адреса — до 64 символов\r")
     private String email;
-}
+}//1

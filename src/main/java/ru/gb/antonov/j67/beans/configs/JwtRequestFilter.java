@@ -30,18 +30,6 @@ public class JwtRequestFilter extends OncePerRequestFilter
     private final JwtokenUtil jwtokenUtil;
     private final OurUserDetailsService ourUserDetailsService;
 
-/*  Этот класс, кажется, служит для того, чтобы не давать стандартным фильтрам получать
-    запросы клиентов «как есть». Т.е. мы тут сами разбираем токены клиентов, а стандартным
-    фильтрам скармливаем только ту информацию, которую они могут переварить. Подробности
-    как-то забылись, а пересматривать двухчасовое видео желание пока не появилось. Методички
-    к этому уроку нет.
-
-    Наш фильтр вставялется в начало цепочки фильтров в самом конце SecurityConfig.configure().
-
-    (При использовании JSID токен UsernamePasswordAuthenticationToken создаётся фильтром
-    UsernamePasswordAuthenticationFilter при получении POST-запроса от клиента. Подробности —
-    в схеме к уроку 11.)
-*/
     @Override
     protected void doFilterInternal (HttpServletRequest request,
                                      HttpServletResponse response,
@@ -49,9 +37,6 @@ public class JwtRequestFilter extends OncePerRequestFilter
     {   String login = null;
         String jwt   = null;
         String prefixBearer = "Bearer ";
-
-    //Ищем в запросе заголовок «Authorization», убеждаемся, что содержимое заголовка начинается
-    // с префикса «Bearer », и извлекаем из него логин:
         String authHeader = request.getHeader ("Authorization");
 
         if (authHeader != null && authHeader.startsWith (prefixBearer))
@@ -65,22 +50,12 @@ public class JwtRequestFilter extends OncePerRequestFilter
                 log.debug ("The token is expired");
             }
         }
-    //Вычисляем токен для СпрингСекюрити-контекста:
+
         if (login != null && SecurityContextHolder.getContext ().getAuthentication () == null)
         {
-    /*  Путь первый — помещаем юзера в СпрингСекюрити-контекст на каждом приходящем запросе!
-    Проверяется только подпись токена. Работает быстро. Отрицательный момент — информация
-    о юзере не сравнивается с базой.: */
-
             //UsernamePasswordAuthenticationToken token = trustYourUser (login, jwt);
-
-    /*  Путь второй — похож на первый, но токен сверяется с информацией в БД.
-    Очевидный минус — с каждым пришедшим запросом приходится запрашивать БД. Поскольку наша БД
-    находится в памяти, идём вторым путём.:    */
-
             UsernamePasswordAuthenticationToken token = trustDatabaseOnly (login, jwt, request);
 
-    //Помещаем вычисленный токен в СпрингСекюрити-контекст:
             SecurityContextHolder.getContext ().setAuthentication (token);
         }
         filterChain.doFilter (request, response);
@@ -94,7 +69,6 @@ public class JwtRequestFilter extends OncePerRequestFilter
                        .map (SimpleGrantedAuthority::new)
                        .collect (Collectors.toList ());
 
-        //На основании инф-ции из присланного jwt формируем токен для СпрингСекюрити-контекста:
         UsernamePasswordAuthenticationToken token =
             new UsernamePasswordAuthenticationToken (login, null, gaCollection);
 
@@ -106,7 +80,6 @@ public class JwtRequestFilter extends OncePerRequestFilter
     {
         UserDetails userDetails = ourUserDetailsService.loadUserByUsername (login);
 
-        //формируем токен для СпрингСекюрити-контекста на основании инф-ции, полученной из базы:
         UsernamePasswordAuthenticationToken token =
             new UsernamePasswordAuthenticationToken(
                     userDetails,

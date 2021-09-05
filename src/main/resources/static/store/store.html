@@ -9,9 +9,6 @@
 			<th>more actions</th>
 			<th ng-show="canShow()">add to cart</th>
 		</tr>
-		<!-- ng-show  не работает на таком уровне. Оно даже таблицу спрятать не может
-		(не удалось спрятать таблицу корзины). -->
-
 		<tr ng-repeat="p in productsPage.content">
 			<td>{{p.productId}}</td>
 			<td>{{p.productTitle}}</td>
@@ -29,7 +26,6 @@
 					title="Удалить продукт."
 					ng-click="deleteProduct(p.productId)" ng-show="canShow()">r</button>
 			</td>
-			<!-- sar 📝 ✂ ✖🗙❌⚙ℹ style="font-family: Webdings;"   -->
 			<td ng-show="canShow()">
 				<button class="btn btn-primary"
 					title="Добавить продукт в корзину." style="width: 30pt"

@@ -1,15 +1,7 @@
 
 angular.module('market-front').controller('registrationController',
-						function ($rootScope, $scope, $http, /*$routeParams,*/ $location, $localStorage)
+						function ($rootScope, $scope, $http, $location, $localStorage)
 {
-/*	$routeParams -	позволяет при маршрутизации передавать парметры в адресной строке (маршрутизация
-					описывается в index10.js. >> function config)
-	$location - позволяет переходить на др.страницу.
-	$http - позволяет посылать из приложения http-запросы
-	$scope - некий обменник между этим js-файлом и html-файлом.
-	$rootScope - глобальный контекст (позволяет обращаться к ф-циям (и переменным?) откуда угодно)
-	$localStorage - локальное хранилище браузера (требуется подкл. скрипт ngStorage.min.js.)
-*/
 	const contextProductPath = 'http://localhost:8189/market/api/v1/auth';
 	var contextPrompt_Registered = "Вы успешно зарегистрированы.";
 	var contextPrompt_Unathorized = "Введите логин, паоль и адрес электронной почты.";
@@ -48,7 +40,7 @@ angular.module('market-front').controller('registrationController',
 					$scope.contextPrompt = contextPrompt_Registered;
 				}
 			},
-			function failureCallback (response)	//кажется, errorCallback тоже можно использовать
+			function failureCallback (response)
 			{
 				alert ('ОШИБКА: '+ response.data.messages);
 				console.log ('$scope.tryToRegister failure callback. : '+ response.data.messages);
@@ -66,7 +58,6 @@ angular.module('market-front').controller('registrationController',
 	$scope.clearNewUserFields = function()	{	$scope.new_user = null;	}
 
 	$scope.canShow = function()	{	return !$rootScope.isUserLoggedIn();	}
-//----------------------------------------------------------------------------------------
 
-	$scope.prepareToRegistration();	//< вызов описанной выше функции
+	$scope.prepareToRegistration();
 });

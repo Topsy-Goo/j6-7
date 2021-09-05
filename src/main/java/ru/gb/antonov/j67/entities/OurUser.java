@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Entity
-//@Data
 @Table(name="ourusers")
 public class OurUser
 {
@@ -45,7 +44,6 @@ public class OurUser
 
     protected OurUser(){}
 
-//Здесь мы создаём не сущность, а шаблон для добавления юзера в базу. А вот из БД мы получаем настоящую сущность.
     public static OurUser dummyOurUser (String login, String password, String email)
     {
         OurUser u = new OurUser();
@@ -54,12 +52,9 @@ public class OurUser
                 "Недопустимый набор значений:\r    логин = %s,\r    пароль = %s,\r    почта = %s\r",
                 login, password, email));
 
-        u.roles = new HashSet<>(); /*< без этого не работает… Хотя, казалось бы, что мешает при сохранении
-        проверить и инициализировать подходящим Set'ом, чтобы простому юзеру не ломать голову, какая
-        колллекция в это время года используется Спрингом для хранения связей?   */
+        u.roles = new HashSet<>();
         return u;
     }
-//----------------------- Геттеры и сеттеры -------------------------------------
 
     public Long getId() {   return id;   }
     private void setId (Long id) {   this.id = id;   }
@@ -77,9 +72,6 @@ public class OurUser
     public String getPassword() {   return password;   }
     private void setPassword (String password) {   this.password = password;   }
 
-/*  Отдельный метод для установки пароля вручную, чтобы иметь возможность сообщать юзеру о некорректно
-заданном пароле и при этом выводить в сообщении пароль, а не хэш пароля.
-*/
     private boolean setPass (String password)
     {
         String s = validateString (password, 3, 128);
@@ -105,17 +97,14 @@ public class OurUser
     public LocalDateTime getCreatedAt() {   return createdAt;   }
     private void setCreatedAt (LocalDateTime ldt)
     {
-        //Исходим из предположения, что за корректностью значений следит БД.
         this.createdAt = ldt;
     }
 
     public LocalDateTime getUpdatedAt() {   return updatedAt;   }
     private void setUpdatedAt (LocalDateTime ldt)
     {
-        //Исходим из предположения, что за корректностью значений следит БД.
         this.updatedAt = ldt;
     }
-//--------------------- Другие методы ---------------------------------------
 
     public boolean addRole (Role role)  {   return (role != null) && roles.add (role);   }
 

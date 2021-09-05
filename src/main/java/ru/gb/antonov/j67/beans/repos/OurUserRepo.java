@@ -10,4 +10,4 @@ import java.util.Optional;
 public interface OurUserRepo extends CrudRepository <OurUser, Long>
 {
     Optional<OurUser> findByLogin (String login);
-}
+}//1

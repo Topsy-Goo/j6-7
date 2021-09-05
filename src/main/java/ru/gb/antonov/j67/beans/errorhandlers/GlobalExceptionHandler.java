@@ -5,9 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-/*   Этот класс-бин используется для обработки исключений, бросаемых в приложении. С его помощью необрабатываемые исключения «превращаются» в сообщения и отправляются клиенту.   */
-
-@ControllerAdvice   //< наследуется от @Component
+@ControllerAdvice
 public class GlobalExceptionHandler
 {
     @ExceptionHandler

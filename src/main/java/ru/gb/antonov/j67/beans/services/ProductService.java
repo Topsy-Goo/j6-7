@@ -18,14 +18,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor    //< создаёт конструктор с параметрами для инициализации всех final-полей.
+@RequiredArgsConstructor
 public class ProductService
 {
     private final ProductRepo productRepo;
     private final ShoppingCart cart;
     private static int pageIndexLast = 0;
 
-//-----------------------------------------------------------------------
 
     @NotNull
     public Product findById (Long id)
@@ -76,22 +75,22 @@ public class ProductService
 
     public void deleteById (Long id)
     {
-        Product p = findById (id);  //< бросает ResourceNotFoundException
-        cart.removeFromCart (p);    //< сперва удаляем из корзины
+        Product p = findById (id);
+        cart.removeFromCart (p);
         productRepo.delete(p);
     }
 
     public Product createProduct (String title, double cost)
     {
         Product p = new Product();
-        p.update (title, cost);     //< бросает ProductUpdatingException
+        p.update (title, cost);
         return productRepo.save (p);
     }
 
     public Product updateProduct (long id, String title, double cost)
     {
-        Product p = findById (id);  //< бросает ResourceNotFoundException
-        p.update (title, cost);     //< бросает ProductUpdatingException
+        Product p = findById (id);
+        p.update (title, cost);
         return productRepo.save (p);
     }
 
@@ -119,8 +118,6 @@ public class ProductService
     {
         return cart.getItemsCount();
     }
-
-//--------- Методы для преобразований Product в ProductDto --------------
 
     public static ProductDto dtoFromProduct (Product product)
     {

@@ -3,8 +3,6 @@ package ru.gb.antonov.j67.beans.errorhandlers;
 import java.util.Collections;
 import java.util.List;
 
-//Сласс создан для использования возможностей hibernate.validator'а.
-//Об использовании см. GlobalExceptionHandler, ErrorMessage, ProductController.createProduct() и Product.
 public class OurValidationException extends RuntimeException
 {
     private final List<String> messages;

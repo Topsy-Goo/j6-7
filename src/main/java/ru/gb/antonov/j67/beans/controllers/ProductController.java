@@ -19,21 +19,15 @@ import java.util.stream.Collectors;
 import static ru.gb.antonov.j67.beans.services.ProductService.productListToDtoList;
 
 @RequestMapping ("/api/v1/products")
-@RestController //< все методы возвращают JSON'ы, плюс позволяет не указывать над методами @ResponseBody.
-@RequiredArgsConstructor    //< создаёт конструктор для инициализации всех final-полей.
+@RestController
+@RequiredArgsConstructor
 public class ProductController
 {
     private final ProductService productService;
     private final int pageSize = 6;
 
-    /*@Autowired //< эта аннотация для конструктора необязательна
-    public ProductController (ProductService ps)
-    {
-        productService = ps;
-    }*/
-    public int getPageSize()    {   return pageSize;   }
 
-//--------------------------------------------------------------------
+    public int getPageSize()    {   return pageSize;   }
 
     //http://localhost:8189/market/api/v1/products/11
      @GetMapping ("/{id}")
@@ -54,15 +48,8 @@ public class ProductController
     @PostMapping
     public Optional<ProductDto> createProduct (@RequestBody @Validated ProductDto pdto, BindingResult br)
     {
-/*
-Нельзя изменять последовательность следующих параметров:
-    @Validated ProductDto pdto, BindingResult br
-Спринг проверит параметр ProductDto pdto, и по результатам этой проверки заполнит BindingResult br.
-Состояние BindingResult после проверки проверяем мы:
-*/
         if (br.hasErrors())
         {
-            //преобразуем набор ошибок в список сообщений, и пакуем в одно общее исключение (в наше заранее для это приготовленное исключение).
             throw new OurValidationException (br.getAllErrors()
                                                 .stream()
                                                 .map(ObjectError::getDefaultMessage)
@@ -88,12 +75,8 @@ public class ProductController
     public void deleteProductById (@PathVariable Long id)
     {
         productService.deleteById (id);
-        //cartController.deleteById (id);
     }
 
-    //http://localhost:8189/market/api/v1/products?min=50&max=90
-    //http://localhost:8189/market/api/v1/products?min=50
-    //http://localhost:8189/market/api/v1/products?max=90
     @GetMapping
     public List<ProductDto> getProductsByPriceRange (
                                     @RequestParam(name="min", required = false) Integer min,

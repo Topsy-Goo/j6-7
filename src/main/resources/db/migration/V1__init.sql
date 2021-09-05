@@ -31,7 +31,7 @@ CREATE TABLE ourusers
 (
 	id			bigserial,
 	login		VARCHAR(32) NOT NULL UNIQUE,
-	password	VARCHAR(64) NOT NULL,	-- размер 64 не для пароля юзера, а для хэша (хэш, похоже, всегда занимает 60 символов. Даже для пароля длиннее в 128 символов)
+	password	VARCHAR(64) NOT NULL,	-- размер 64 — для хэша (он, похоже, всегда занимает 60 символов, даже для пароля в 128 символов)
 	email		VARCHAR(64) NOT NULL UNIQUE,
 	created_at	TIMESTAMP DEFAULT current_timestamp,
 	updated_at	TIMESTAMP DEFAULT current_timestamp,

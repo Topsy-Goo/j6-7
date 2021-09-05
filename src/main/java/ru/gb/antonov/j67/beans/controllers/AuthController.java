@@ -99,4 +99,4 @@ public class AuthController
         return new ResponseEntity<> (new ErrorMessage ("Something went wrong."),
                                      HttpStatus.INTERNAL_SERVER_ERROR);
     }
-}
+}//1

@@ -7,8 +7,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name="products")
-//@NoArgsConstructor (access = AccessLevel.PROTECTED) < ломбок создаёт умолчальный конструктор, но непонятно, в чём выгода.
-//@Data     < ломбок генерит геттеры и сеттеры, которые годятся только для учебных проектов; имеет опцию, кажется, для статического конструктора.
 public class Product
 {
     public static final Double MIN_PRICE = 0.0;
@@ -36,7 +34,6 @@ public class Product
                 "Недопустимый набор значений:\r    название продукта = %s,\r    цена = %.2f.", t, c));
         }
     }
-//----------------- Геттеры и сеттеры -----------------------------------
 
     public Long getId ()    {   return id;   }
     private void setId (Long id)   {   this.id = id;   }
@@ -59,7 +56,6 @@ public class Product
             this.cost = cost;
         return ok;
     }
-//-----------------------------------------------------------------------
 
     public static boolean isTitleValid (String title)
     {

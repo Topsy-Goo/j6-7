@@ -8,7 +8,7 @@ import ru.gb.antonov.j67.entities.dtos.ProductDto;
 
 @RequestMapping ("/api/v1/cart")
 @RestController
-@RequiredArgsConstructor    //< создаёт конструктор для инициализации всех final-полей.
+@RequiredArgsConstructor
 public class CartController
 {
     private final ProductService productService;

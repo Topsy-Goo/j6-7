@@ -9,4 +9,4 @@ public class AuthRequest
 {
     private String login;
     private String password;
-}
+}//1

@@ -8,4 +8,4 @@ import ru.gb.antonov.j67.entities.Role;
 public interface RoleRepo extends CrudRepository<Role, Integer>
 {
     Role findByName (String name);
-}
+}//1

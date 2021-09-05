@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 @Component
 public class JwtokenUtil
 {
-    @Value("${jwt.secret}") //< синтаксис ссылается на проперти-файл
-    private String secret;      //< обычно выносится в к-л конфиг (см. yaml)
+    @Value("${jwt.secret}")
+    private String secret;
 
     @Value("${jwt.lifetime}")
-    private Integer lifetime;   //< обычно выносится в к-л конфиг (см. yaml)
+    private Integer lifetime;
 
     public String generateJWToken (UserDetails userDetails)
     {
@@ -59,16 +59,13 @@ public class JwtokenUtil
     private Claims getAllClaimsFromToken(String token)
     {
         return Jwts.parser()
-                   .setSigningKey (secret)  //< нужет для проверки подлинности и актуальности токена
+                   .setSigningKey (secret)
                    .parseClaimsJws (token)
                    .getBody();
     }
 
     public List<String> getRoles(String token)
     {
-    /*    return getClaimFromToken (
-                token,
-                (Function<Claims, List<String>>) claims -> claims.get("roles", List.class));*/
         return getClaimFromToken (token, claims -> claims.get("roles", List.class));
     }
 }
