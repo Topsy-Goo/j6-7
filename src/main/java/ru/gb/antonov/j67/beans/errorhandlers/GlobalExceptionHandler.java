@@ -23,6 +23,13 @@ public class GlobalExceptionHandler
     }
 
     @ExceptionHandler
+    public ResponseEntity<?> catchUserCreatingException (UserCreatingException e)
+    {
+        return new ResponseEntity<>(new ErrorMessage (e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    //это искл-е использ-ся hibernate.validator'ом.
+    @ExceptionHandler
     public ResponseEntity<?> catchOurValidationException (OurValidationException e)
     {
         return new ResponseEntity<>(new ErrorMessage (e.getMessages()), HttpStatus.BAD_REQUEST);

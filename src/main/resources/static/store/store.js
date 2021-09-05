@@ -6,12 +6,12 @@ angular.module('market-front').controller('storeController', function ($scope, $
 	controller('storeController', … означает, что здесь мы создаём контроллер и даём ему указанное имя;
 
 	$location - позволяет переходить на др.страницу
-
 	$scope-переменные не видны за пределами того контроллера, в котором они объявлены.
 
 	Каждый раз, когда мы будем переходить на эту страницу, будет производиться её инициализация.
 */
-	const contextProductPath = 'http://localhost:8189/market/api/v1/products';	//< Для удобства составления адресов
+	const contextProductPath = 'http://localhost:8189/market/api/v1/products';
+	const contextCartPath = 'http://localhost:8189/market/api/v1/cart';
 
 	var productPageCurrent = 0;
 	var productPageTotal = 0;	//< такая переменная не видна в HTML-файле
@@ -19,7 +19,7 @@ angular.module('market-front').controller('storeController', function ($scope, $
 
 	$scope.getCartItemsCount = function()
 	{
-		$http.get (contextProductPath + '/cartitemscount')
+		$http.get (contextCartPath + '/itemscount')
 		.then (
 		function successCallback (response)
 		{
@@ -48,12 +48,8 @@ angular.module('market-front').controller('storeController', function ($scope, $
 			productPageTotal = $scope.productsPage.totalPages;
 
 			$scope.paginationArray = $scope.generatePagesIndexes(1, productPageTotal);
-
-		/*	console.log (response.data);
-			console.log ('productPageTotal: '+ productPageTotal);
-			console.log ('productPageCurrent: '+ productPageCurrent);*/
 		});
-	};
+	}
 
 	$scope.generatePagesIndexes = function (startPage, endPage)
 	{
@@ -107,14 +103,11 @@ angular.module('market-front').controller('storeController', function ($scope, $
 	$scope.startEditProduct = function (pid)
 	{
 		$location.path ('/edit_product/'+ pid);
-//		$scope.new_product = new CopyOfProductDto (p);
 	}
 
 	$scope.addToCart = function (pid)
 	{
-		console.log ('addToCart.pid: '+ pid);
-
-		$http.get (contextProductPath + '/addtocart/' + pid)
+		$http.get (contextCartPath + '/add/' + pid)
 		.then (
 		function successCallback (response)
 		{
@@ -134,7 +127,7 @@ angular.module('market-front').controller('storeController', function ($scope, $
 
 		if ($scope.cartItemsCount > 0)
 		{
-			$http.get (contextProductPath + '/removefromcart/' + pid)
+			$http.get (contextCartPath + '/remove/' + pid)
 			.then (
 			function successCallback (response)
 			{
@@ -148,8 +141,11 @@ angular.module('market-front').controller('storeController', function ($scope, $
 		}
 	}
 
+	$scope.canShow = function()
+	{
+		return $rootScope.isUserLoggedIn();
+	}
 //----------------------------------------------------------------------------------------
 
 	$scope.loadProductsPage();
-
 });

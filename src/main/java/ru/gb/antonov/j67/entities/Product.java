@@ -1,11 +1,8 @@
 package ru.gb.antonov.j67.entities;
 
-import org.hibernate.validator.constraints.Length;
 import ru.gb.antonov.j67.beans.errorhandlers.ProductUpdatingException;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -22,14 +19,9 @@ public class Product
     @Column (name="id")
     private Long id;
 
-/*  У hibernate.validator'а есть полезные нотации, которые перекладывают некоторые проверки на яву, разгружая от лишней работы БД и сеть.
-*/
-    @NotNull (message="задайте название для продукта")
-    @Length (min=3, max=255, message="длина названия в интервале 3…255 символов\r")
     @Column(name="title")
     private String title;
 
-    @Min (value=0, message="только неотрицательная цена продукта\r")
     @Column(name="price")
     private double cost;
 
@@ -84,12 +76,13 @@ public class Product
         return String.format("[id:%d, «%s», %.2f]", id, title, cost);
     }
 
-    @Override public boolean equals (Object o)
+    @Override
+    public boolean equals (Object o)
     {
         Product p = (Product) o;
         return p!=null && this.id.equals(p.getId());
     }
 
-    @Override public int hashCode()    {   return Objects.hash(id);   }
-
+    @Override
+    public int hashCode()    {   return Objects.hash(id);   }
 }

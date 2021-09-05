@@ -37,18 +37,16 @@ angular.module('market-front').controller('edit_productController', function ($s
 
 	$scope.createOrUpdateProduct = function ()
 	{
-		if ($scope.new_product == null)
+		if ($scope.new_product != null)
 		{
-			alert ('\rвсё хорошо?');
-		}
-		else
-		if ($scope.new_product.productId == null)
-		{
-			$scope.createNewProduct ($scope.new_product);
-		}
-		else
-		{
-			$scope.putProduct ($scope.new_product);
+			if ($scope.new_product.productId == null)
+			{
+				$scope.createNewProduct ($scope.new_product);
+			}
+			else
+			{
+				$scope.updateProduct ($scope.new_product);
+			}
 		}
 	}
 
@@ -65,18 +63,20 @@ angular.module('market-front').controller('edit_productController', function ($s
 		function failureCallback (response)
 		{
 			$scope.contextPrompt = 'Не удалось создать продукт';
-			alert (response.data.messages);	// Имя параметра должно совпадать с именем поля в передаваемом объекте, коим в данном случае выступает ru.gb.antonov.j67.beans.errorhandlers.ErrorMessage.
+			alert (response.data.messages);	/* Имя параметра должно совпадать с именем поля в
+			передаваемом объекте, коим в данном случае выступает
+			ru.gb.antonov.j67.beans.errorhandlers.ErrorMessage.	*/
 		});
 	}
 
-	$scope.putProduct = function (p)
+	$scope.updateProduct = function (p)
 	{
 		$http.put (contextProductPath, p)
 		.then(
 		function successCallback (response)
 		{
 			$scope.contextPrompt = 'Продукт успешно изменён';
-			$scope.new_product = response.data;	//< показываем хар-ки товара, полученные от бэкэнда
+			$scope.new_product = response.data;	//< показываем харак-ки товара, полученные от бэкэнда
 			// остаёмся на странице, чтобы дать возможность юзеру внести правки
 		},
 		function failureCallback (response)
@@ -86,18 +86,11 @@ angular.module('market-front').controller('edit_productController', function ($s
 		});
 	}
 
-	/*$scope.resetProductForm = function()
-	{
-		$scope.new_product = null;	//< сбросит содержимое формы
-		$scope.contextPrompt = contextPrompt_Creation;
-	}*/
-
 	$scope.cancelProductEditing = function()
 	{
 		$scope.new_product = null;
 		$location.path('/store');
 	}
-
 //----------------------------------------------------------------------------------------
 
 	$scope.prepareEditProductPage();	//< вызов описанной выше функции

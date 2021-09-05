@@ -12,11 +12,14 @@ public class ProductDto
 {
     private Long   productId;
 
+/*  У hibernate.validator'а есть полезные нотации, которые перекладывают некоторые проверки на яву,
+разгружая от лишней работы БД и сеть.
+*/
     @NotNull (message="задайте название для продукта")
     @Length (min=3, max=255, message="длина названия [3…255] символов")
     private String productTitle;
 
-    @Min(value=0, message="неотрицательная цена продукта")
+    @Min(value=0, message="НЕотрицательная цена продукта")
     private double productCost;
 
 
@@ -30,7 +33,5 @@ public class ProductDto
             productTitle = product.getTitle();
             productCost  = product.getCost();
         }
-        else throw new IllegalArgumentException();
     }
-
 }

@@ -1,13 +1,13 @@
 angular.module('market-front').controller('cartController', function ($scope, $http)
 {
-	const contextProductPath = 'http://localhost:8189/market/api/v1/products';
+	const contextProductPath = 'http://localhost:8189/market/api/v1/cart';
 	var cartPageCurrent = 0;
 	var cartPageTotal = 0;
 	$scope.cartItemsCount = 0;
 
 	$scope.getCartItemsCount = function()
 	{
-		$http.get (contextProductPath + '/cartitemscount')
+		$http.get (contextProductPath + '/itemscount')
 		.then (
 		function successCallback (response)
 		{
@@ -25,7 +25,7 @@ angular.module('market-front').controller('cartController', function ($scope, $h
 
 		$http
 		({
-			url: contextProductPath + '/cartpage',
+			url: contextProductPath + '/page',
 			method: 'GET',
 			params:	{p: cartPageCurrent}
 		})
@@ -70,13 +70,12 @@ angular.module('market-front').controller('cartController', function ($scope, $h
 
 	$scope.infoProduct = function (p)
 	{
-		alert('id: ' + p.productId + ',\rназвание: '+ p.productTitle + ',\tцена: '+ p.productCost);
+		alert('id: ' + p.productId + ',\rназвание: '+ p.productTitle + ',\rцена: '+ p.productCost);
 	}
 
 	$scope.addToCart = function (pid)
 	{
-//		console.log ('addToCart.pid: '+ pid);
-		$http.get (contextProductPath + '/addtocart/' + pid)
+		$http.get (contextProductPath + '/add/' + pid)
 		.then (
 		function successCallback (response)
 		{
@@ -92,7 +91,7 @@ angular.module('market-front').controller('cartController', function ($scope, $h
 	{
 		if ($scope.cartItemsCount > 0)
 		{
-			$http.get (contextProductPath + '/removefromcart/' + pid)
+			$http.get (contextProductPath + '/remove/' + pid)
 			.then (
 			function successCallback (response)
 			{
@@ -104,9 +103,7 @@ angular.module('market-front').controller('cartController', function ($scope, $h
 			});
 		}
 	}
-
 //----------------------------------------------------------------------------------------
 
 	$scope.loadProductsPage();
-
 });

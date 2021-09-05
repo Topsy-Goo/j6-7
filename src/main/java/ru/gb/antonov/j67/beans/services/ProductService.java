@@ -2,7 +2,6 @@ package ru.gb.antonov.j67.beans.services;
 
 import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +14,6 @@ import ru.gb.antonov.j67.entities.Product;
 import ru.gb.antonov.j67.entities.dtos.ProductDto;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,13 +25,6 @@ public class ProductService
     private final ShoppingCart cart;
     private static int pageIndexLast = 0;
 
-
-    /*@Autowired //< эта аннотация для конструктора необязательна
-    public ProductService (ProductRepo pr, ShoppingCart c)
-    {
-        productRepo = pr;
-        cart = c;
-    }*/
 //-----------------------------------------------------------------------
 
     @NotNull
@@ -86,6 +77,7 @@ public class ProductService
     public void deleteById (Long id)
     {
         Product p = findById (id);  //< бросает ResourceNotFoundException
+        cart.removeFromCart (p);    //< сперва удаляем из корзины
         productRepo.delete(p);
     }
 

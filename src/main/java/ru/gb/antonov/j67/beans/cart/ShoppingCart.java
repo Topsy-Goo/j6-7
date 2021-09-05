@@ -1,7 +1,6 @@
 package ru.gb.antonov.j67.beans.cart;
 
 import org.springframework.stereotype.Component;
-import ru.gb.antonov.j67.beans.services.ProductService;
 import ru.gb.antonov.j67.entities.Product;
 
 import java.util.Collections;
@@ -49,5 +48,4 @@ public class ShoppingCart
         }
         return false;
     }
-
 }

@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-/*   Сообщение, которое отправлем клиенту, если его запрос некорректен.   */
+/*   Сообщение, которое отправлем клиенту (в виде JSON'а), если его запрос некорректен.   */
 @Data
 @NoArgsConstructor
 public class ErrorMessage

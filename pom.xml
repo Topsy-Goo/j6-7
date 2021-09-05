@@ -60,10 +60,22 @@
 			<optional>true</optional>
 		</dependency>
 
-		<dependency>	<!-- для автоматических проверок (чего?) -->
+		<dependency>	<!-- для организации автоматических проверок параметров методов -->
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>6.1.5.Final</version>
+		</dependency>
+
+		<dependency>	<!-- для организации авторизации при пом.(чего?) -->
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<!-- Также автоматически конфигурирет умолчального пользователя user; его (одноразовый?) пароль создаётся генериться при старте приложения.  -->
+		</dependency>
+
+		<dependency>	<!-- Помогает собирать и парсить JWT. -->
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
 		</dependency>
 
 	</dependencies>

@@ -67,11 +67,16 @@ angular.module('market-front', []).controller('indexController', function ($scop
 
 	$scope.deleteProduct = function (id)
 	{
+		if ($scope.new_product != null && $scope.new_product.productId == id)
+		{
+			$scope.new_product.productId = null;
+		}
+
 		$http.get (contextProductPath + '/delete/' + id)
-			 .then (function (response)
-			 {
-			 	$scope.loadProductsPage();
-			 });
+		.then (function (response)
+		{
+			$scope.loadProductsPage();
+		});
 	}
 
 	$scope.infoProduct = function (p)
@@ -105,13 +110,17 @@ angular.module('market-front', []).controller('indexController', function ($scop
 
 	$scope.createOrUpdateProduct = function ()
 	{
-		if ($scope.new_product.productId == null)
+		if ($scope.new_product != null)
 		{
-			$scope.createNewProduct();
-		}
-		else
-		{
-			$scope.putProduct ($scope.new_product);
+			if ($scope.new_product.productId == null)
+			{
+				$scope.createNewProduct();
+			}
+			else
+			{
+				$scope.putProduct ($scope.new_product);
+			}
+			$scope.new_product = null;
 		}
 	}
 
