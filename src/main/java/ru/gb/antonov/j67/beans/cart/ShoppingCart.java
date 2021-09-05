@@ -11,7 +11,8 @@ import java.util.List;
 public class ShoppingCart
 {
     private final List<Product> products;
-
+    //TODO: вообще-то в корзине нужно собирать id-шники, а не копии продуктов. А можно ещё сделать
+    //      map<pid, amount>. Будет быстро работать.
 
     public ShoppingCart()
     {
@@ -47,5 +48,18 @@ public class ShoppingCart
                 return products.remove (p);
         }
         return false;
+    }
+
+//Ищем в корзине все продукты с одинаковыми id и обновляем их по образу и подобию product.
+    public void updateProduct (Product product)
+    {
+        if (product != null)
+        for (Product p : products)
+        {
+            if (p.getId().equals(product.getId()))
+            {
+                p.update (product.getTitle(), product.getCost());
+            }
+        }
     }
 }

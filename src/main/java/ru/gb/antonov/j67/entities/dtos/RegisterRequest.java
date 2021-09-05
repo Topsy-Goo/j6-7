@@ -18,7 +18,7 @@ public class RegisterRequest
     @Length (min=3, max=128, message="длина пароля — [3…128] символов\r")
     private String password;
 
-    @NotNull (message="укажите адрес электронной почты (до 64 символов)\r")
-    @Length (min=5, max=64, message="длина адреса — до 64 символов\r")
+    @NotNull (message="укажите адрес электронной почты (5…64 символов); формат — xxx@xxx.xx\r")
+    @Length (min=5, max=64, message="длина адреса — 5…64 символов; формат — xxx@xxx.xx\r")
     private String email;
 }

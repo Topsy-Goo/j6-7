@@ -21,4 +21,10 @@ public class RoleService
         }
         return Optional.of (roleRepo.findByName (roleName));
     }
+
+    public Optional<Role> getRoleUser()
+    {
+        return findByName ("ROLE_USER");
+    }
+
 }

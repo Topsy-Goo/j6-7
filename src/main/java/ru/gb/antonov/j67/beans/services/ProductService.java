@@ -92,6 +92,7 @@ public class ProductService
     {
         Product p = findById (id);  //< бросает ResourceNotFoundException
         p.update (title, cost);     //< бросает ProductUpdatingException
+        cart.updateProduct (p);
         return productRepo.save (p);
     }
 

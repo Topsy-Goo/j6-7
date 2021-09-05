@@ -57,10 +57,11 @@ public class OurUserDetailsService implements UserDetailsService
                     .collect (Collectors.toList());
     }
 
+    @Transactional
     public Optional<OurUser> createNewOurUser (String login, String password, String email)
     {
         OurUser dummyUser = OurUser.dummyOurUser (login, password, email);
-        Optional<Role> optionalRole = roleService.findByName ("ROLE_USER");
+        Optional<Role> optionalRole = roleService.getRoleUser();
 
         if (optionalRole.isPresent())
         {
