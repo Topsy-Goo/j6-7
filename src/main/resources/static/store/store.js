@@ -1,5 +1,5 @@
 
-angular.module('market-front').controller('storeController', function ($scope, $http, $location)
+angular.module('market-front').controller('storeController', function ($rootScope, $scope, $http, $location)
 {
 /*	angular.module('market-front')	означает: используем приложение 'market-front'
 
@@ -7,6 +7,7 @@ angular.module('market-front').controller('storeController', function ($scope, $
 
 	$location - позволяет переходить на др.страницу
 	$scope-переменные не видны за пределами того контроллера, в котором они объявлены.
+	$rootScope - глобальный контекст (позволяет обращаться к ф-циям (и переменным?) откуда угодно)
 
 	Каждый раз, когда мы будем переходить на эту страницу, будет производиться её инициализация.
 */
@@ -16,6 +17,7 @@ angular.module('market-front').controller('storeController', function ($scope, $
 	var productPageCurrent = 0;
 	var productPageTotal = 0;	//< такая переменная не видна в HTML-файле
 	$scope.cartItemsCount = 0;	//< такая переменная    видна в HTML-файле
+
 
 	$scope.getCartItemsCount = function()
 	{
@@ -50,7 +52,7 @@ angular.module('market-front').controller('storeController', function ($scope, $
 			$scope.paginationArray = $scope.generatePagesIndexes(1, productPageTotal);
 		});
 	}
-
+//----------------------------------------------------------------- страницы
 	$scope.generatePagesIndexes = function (startPage, endPage)
 	{
 		let arr = [];
@@ -61,24 +63,24 @@ angular.module('market-front').controller('storeController', function ($scope, $
 		return arr;
 	}
 
-	$scope.loadProducts = function (pageIndex = 1)	//< загрузка страницы по индексу
+	$scope.loadProducts = function (pageIndex = 1)
 	{
 		productPageCurrent = pageIndex -1;
 		$scope.loadProductsPage();
 	}
 
-	$scope.prevProductsPage = function ()	//< загрузка левой соседней страницы
+	$scope.prevProductsPage = function ()
 	{
 		productPageCurrent --;
 		$scope.loadProductsPage();
 	}
 
-	$scope.nextProductsPage = function ()	//< загрузка правой соседней страницы
+	$scope.nextProductsPage = function ()
 	{
 		productPageCurrent ++;
 		$scope.loadProductsPage();
 	}
-
+//----------------------------------------------------------------- редактирование
 	$scope.deleteProduct = function (pid)
 	{
 		$http.get (contextProductPath + '/delete/' + pid)
@@ -104,7 +106,7 @@ angular.module('market-front').controller('storeController', function ($scope, $
 	{
 		$location.path ('/edit_product/'+ pid);
 	}
-
+//----------------------------------------------------------------- плюс/минус
 	$scope.addToCart = function (pid)
 	{
 		$http.get (contextCartPath + '/add/' + pid)
@@ -122,9 +124,6 @@ angular.module('market-front').controller('storeController', function ($scope, $
 
 	$scope.removeFromCart = function (pid)
 	{
-	/*	console.log ('removeFromCart: pid: '+ pid);
-		console.log ('removeFromCart: $scope.cartItemsCount: '+ $scope.cartItemsCount);*/
-
 		if ($scope.cartItemsCount > 0)
 		{
 			$http.get (contextCartPath + '/remove/' + pid)
@@ -140,12 +139,11 @@ angular.module('market-front').controller('storeController', function ($scope, $
 			});
 		}
 	}
-
+//----------------------------------------------------------------- условия
 	$scope.canShow = function()
 	{
 		return $rootScope.isUserLoggedIn();
 	}
-//----------------------------------------------------------------------------------------
-
+//----------------------------------------------------------------- вызовы
 	$scope.loadProductsPage();
 });

@@ -87,7 +87,7 @@ angular.module('market-front').controller('indexController',
 	$rootScope - глобальный контекст (позволяет обращаться к ф-циям (и переменным?) откуда угодно)
 	$localStorage - локальное хранилище браузера (требуется подкл. скрипт ngStorage.min.js.)
 */
-	const contextProductPath = 'http://localhost:8189/market/api/v1/auth';
+	const contextAuthoPath = 'http://localhost:8189/market/api/v1/auth';
 	$scope.appTitle = 'Marketplace';
 	$scope.mainPageTitle = 'Главная страница';
 	$scope.storePageTitle = 'Каталог продуктов';
@@ -114,15 +114,13 @@ angular.module('market-front').controller('indexController',
 			сообщениям об ошибках, будет ломать голову гадая, что именно не работает.
 		*/
 		$scope.user = null;
-		/*$scope.user.login = null;
-		$scope.user.password = null;*/
 	}
 
 	$scope.tryToLogin = function ()
 	{
 		if ($scope.user != null)
 		{
-			$http.post(contextProductPath + '/login', $scope.user)
+			$http.post(contextAuthoPath + '/login', $scope.user)
 			.then
 			(function successCallback (response)
 			{
@@ -152,7 +150,7 @@ angular.module('market-front').controller('indexController',
 		$scope.removeUserFromLocalStorage();
 		$scope.clearUserFields();
 		$location.path('/main');
-	};
+	}
 
 	$scope.removeUserFromLocalStorage = function ()
 	{
@@ -162,6 +160,6 @@ angular.module('market-front').controller('indexController',
 
 		//Кажется, это приведёт к удалению заголовка Authorization из списка умолчальных заголовков:
 		$http.defaults.headers.common.Authorization = '';
-	};
+	}
 });
 

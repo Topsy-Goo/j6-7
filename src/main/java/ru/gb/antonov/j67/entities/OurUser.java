@@ -50,14 +50,44 @@ public class OurUser
     {
         OurUser u = new OurUser();
         if (!u.setLogin (login) || !u.setPass (password) || !u.setEmail (email))
+        {
             throw new UserCreatingException (String.format (
                 "Недопустимый набор значений:\r    логин = %s,\r    пароль = %s,\r    почта = %s\r",
                 login, password, email));
-
+        }
         u.roles = new HashSet<>(); /*< без этого не работает… Хотя, казалось бы, что мешает при сохранении
         проверить и инициализировать подходящим Set'ом, чтобы простому юзеру не ломать голову, какая
         колллекция в это время года используется Спрингом для хранения связей?   */
         return u;
+    }
+//--------------------- Другие методы ---------------------------------------
+
+    public boolean addRole (Role role)  {   return (role != null) && roles.add (role);   }
+
+    public static String  validateString (String s, int minLen, int maxLen)
+    {
+        if (s != null && minLen > 0 && minLen <= maxLen)
+        {
+            s = s.trim();
+            int len = s.length();
+            if (len >= minLen && len <= maxLen)
+            {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    public static boolean hasEmailFormat (String email)
+    {
+/*        boolean ok = false;
+        int at = email.indexOf ('@');
+        if (at > 0 && email.indexOf ('@', at +1) < 0)
+        {
+            int point = email.indexOf ('.', at);
+            ok = point >= at +2;
+        }
+        return ok;*/return true;
     }
 //----------------------- Геттеры и сеттеры -------------------------------------
 
@@ -85,7 +115,7 @@ public class OurUser
         String s = validateString (password, 3, 128);
         boolean ok = s != null;
         if (ok)
-            setPassword (new BCryptPasswordEncoder ().encode (s));
+            setPassword (new BCryptPasswordEncoder().encode(s));
         return ok;
     }
 
@@ -114,34 +144,5 @@ public class OurUser
     {
         //Исходим из предположения, что за корректностью значений следит БД.
         this.updatedAt = ldt;
-    }
-//--------------------- Другие методы ---------------------------------------
-
-    public boolean addRole (Role role)  {   return (role != null) && roles.add (role);   }
-
-    public static String  validateString (String s, int minLen, int maxLen)
-    {
-        if (s != null && minLen > 0 && minLen <= maxLen)
-        {
-            s = s.trim();
-            int len = s.length();
-            if (len >= minLen && len <= maxLen)
-            {
-                return s;
-            }
-        }
-        return null;
-    }
-
-    public static boolean hasEmailFormat (String email)
-    {
-        boolean ok = false;
-        int at = email.indexOf ('@');
-        if (at > 0 && email.indexOf ('@', at +1) < 0)
-        {
-            int point = email.indexOf ('.', at);
-            ok = point >= at +2;
-        }
-        return ok;
     }
 }

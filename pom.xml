@@ -78,6 +78,12 @@
 			<version>0.9.1</version>
 		</dependency>
 
+        <dependency>	<!-- для AOP -->
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.2</version>
+        </dependency>
+
 	</dependencies>
 
 	<build>

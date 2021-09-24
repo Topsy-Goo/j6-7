@@ -15,21 +15,28 @@ public class CartController
     private final ProductController productController;
 
 
-    //http://localhost:8189/market/api/v1/cart/add/18
+    //http://localhost:8189/market/api/v1/cart/add/18     cart.js, store.js,
     @GetMapping ("/add/{id}")
     public Integer addProductToCart (@PathVariable Long id)
     {
         return productService.addToCart (id);
     }
 
-    //http://localhost:8189/market/api/v1/cart/remove/18
+    //http://localhost:8189/market/api/v1/cart/remove/18    cart.js, store.js,
     @GetMapping ("/remove/{id}")
     public Integer removeProductFromCart (@PathVariable Long id)
     {
         return productService.removeFromCart (id);
     }
 
-    //http://localhost:8189/market/api/v1/cart/page
+    //http://localhost:8189/market/api/v1/cart/itemscount   cart.js, store.js,
+    @GetMapping ("/itemscount")
+    public Integer getCartItemsCount ()
+    {
+        return productService.getCartItemsCount();
+    }
+
+    //http://localhost:8189/market/api/v1/cart/page         cart.js,
     //http://localhost:8189/market/api/v1/cart/page?p=0
     @GetMapping ("/page")
     public Page<ProductDto> getProductsCartPage (
@@ -37,12 +44,5 @@ public class CartController
     {
         return productService.getCartPage (pageIndex, productController.getPageSize())
                              .map(ProductService::dtoFromProduct);
-    }
-
-    //http://localhost:8189/market/api/v1/cart/itemscount
-    @GetMapping ("/itemscount")
-    public Integer getCartItemsCount()
-    {
-        return productService.getCartItemsCount();
     }
 }

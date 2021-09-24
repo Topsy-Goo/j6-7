@@ -7,8 +7,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name="products")
-//@NoArgsConstructor (access = AccessLevel.PROTECTED) < ломбок создаёт умолчальный конструктор, но непонятно, в чём выгода.
-//@Data     < ломбок генерит геттеры и сеттеры, которые годятся только для учебных проектов; имеет опцию, кажется, для статического конструктора.
+//@NoArgsConstructor (access = AccessLevel.PROTECTED) < ломбок создаёт умолчальный конструктор, но не очень понятно, в чём выгода.
+//@Data
 public class Product
 {
     public static final Double MIN_PRICE = 0.0;
@@ -27,7 +27,6 @@ public class Product
 
 
     public Product(){}
-
     public void update (String t, double c)
     {
         if (!setTitle (t) || !setCost (c))
@@ -61,20 +60,11 @@ public class Product
     }
 //-----------------------------------------------------------------------
 
-    public static boolean isTitleValid (String title)
-    {
-        return title != null  &&  !title.trim().isEmpty();
-    }
+    public static boolean isTitleValid (String title) { return title != null  &&  !title.trim().isEmpty(); }
 
-    public static boolean isCostValid (double cost)
-    {
-        return cost >= MIN_PRICE  &&  cost <= MAX_PRICE;
-    }
+    public static boolean isCostValid (double cost) { return cost >= MIN_PRICE  &&  cost <= MAX_PRICE; }
 
-    public String toString()
-    {
-        return String.format("[id:%d, «%s», %.2f]", id, title, cost);
-    }
+    public String toString() { return String.format("[id:%d, «%s», %.2f]", id, title, cost); }
 
     @Override
     public boolean equals (Object o)

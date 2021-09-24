@@ -9,9 +9,7 @@
 			<th>more actions</th>
 			<th ng-show="canShow()">add to cart</th>
 		</tr>
-		<!-- ng-show  не работает на таком уровне. Оно даже таблицу спрятать не может
-		(не удалось спрятать таблицу корзины). -->
-
+		<!-- ng-show  работает и на таком уровне, если не забыть добавить $rootScope в js-файл. -->
 		<tr ng-repeat="p in productsPage.content">
 			<td>{{p.productId}}</td>
 			<td>{{p.productTitle}}</td>

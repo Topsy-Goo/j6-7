@@ -10,7 +10,8 @@ angular.module('market-front').controller('registrationController',
 	$rootScope - глобальный контекст (позволяет обращаться к ф-циям (и переменным?) откуда угодно)
 	$localStorage - локальное хранилище браузера (требуется подкл. скрипт ngStorage.min.js.)
 */
-	const contextProductPath = 'http://localhost:8189/market/api/v1/auth';
+	const contextAuthoPath = 'http://localhost:8189/market/api/v1/auth';
+
 	var contextPrompt_Registered = "Вы успешно зарегистрированы.";
 	var contextPrompt_Unathorized = "Введите логин, паоль и адрес электронной почты.";
 	var contextPrompt_LogedIn = "Вы уже авторизованы.";
@@ -27,8 +28,7 @@ angular.module('market-front').controller('registrationController',
 			$scope.contextPrompt = contextPrompt_LogedIn;
 		}
 		else
-		{
-			$scope.contextPrompt = contextPrompt_Unathorized;
+		{	$scope.contextPrompt = contextPrompt_Unathorized;
 		}
 	}
 
@@ -36,7 +36,7 @@ angular.module('market-front').controller('registrationController',
 	{
 		if ($scope.new_user != null)
 		{
-			$http.post(contextProductPath + '/register', $scope.new_user)
+			$http.post(contextAuthoPath + '/register', $scope.new_user)
 			.then
 			(function successCallback (response)
 			{
@@ -63,10 +63,15 @@ angular.module('market-front').controller('registrationController',
 		$location.path('/main');
 	}
 
-	$scope.clearNewUserFields = function()	{	$scope.new_user = null;	}
-
-	$scope.canShow = function()	{	return !$rootScope.isUserLoggedIn();	}
-//----------------------------------------------------------------------------------------
-
+	$scope.clearNewUserFields = function()
+	{
+		$scope.new_user = null;
+	}
+//----------------------------------------------------------------- условия
+	$scope.canShow = function()
+	{
+		return !$rootScope.isUserLoggedIn();
+	}
+//----------------------------------------------------------------- вызовы
 	$scope.prepareToRegistration();	//< вызов описанной выше функции
 });

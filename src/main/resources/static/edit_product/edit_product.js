@@ -10,6 +10,7 @@ angular.module('market-front').controller('edit_productController', function ($s
 	var contextPrompt_Editing = "Изменение существующего продукта";
 	$scope.contextPrompt = "";
 
+
 	$scope.prepareEditProductPage = function ()
 	{
 	/* имя параметра (pid) должно совпадать с именем элемента в index10.js. >> function config >> ….when('/edit_product/:pid'…)	*/
@@ -91,7 +92,6 @@ angular.module('market-front').controller('edit_productController', function ($s
 		$scope.new_product = null;
 		$location.path('/store');
 	}
-//----------------------------------------------------------------------------------------
-
-	$scope.prepareEditProductPage();	//< вызов описанной выше функции
+//----------------------------------------------------------------- вызовы
+	$scope.prepareEditProductPage();
 });

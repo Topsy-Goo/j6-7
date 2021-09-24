@@ -32,17 +32,16 @@ public class ProductController
         productService = ps;
     }*/
     public int getPageSize()    {   return pageSize;   }
-
 //--------------------------------------------------------------------
 
-    //http://localhost:8189/market/api/v1/products/11
-     @GetMapping ("/{id}")
+    //http://localhost:8189/market/api/v1/products/11           edit_product.js,
+    @GetMapping ("/{id}")
     public ProductDto findById (@PathVariable Long id)
     {
         return ProductService.dtoFromProduct (productService.findById (id));
     }
 
-    //http://localhost:8189/market/api/v1/products/page?p=0
+    //http://localhost:8189/market/api/v1/products/page?p=0     store.js,
     @GetMapping ("/page")
     public Page<ProductDto> getProductsPage (
                    @RequestParam (defaultValue="0", name="p", required = false) Integer pageIndex)
@@ -50,13 +49,12 @@ public class ProductController
         return productService.findAll (pageIndex, pageSize).map(ProductService::dtoFromProduct);
     }
 
-   //http://localhost:8189/market/api/v1/products   POST
+   //http://localhost:8189/market/api/v1/products   POST        edit_product.js,
     @PostMapping
     public Optional<ProductDto> createProduct (@RequestBody @Validated ProductDto pdto, BindingResult br)
     {
 /*
-Нельзя изменять последовательность следующих параметров:
-    @Validated ProductDto pdto, BindingResult br
+Нельзя изменять последовательность следующих параметров:    @Validated ProductDto pdto, BindingResult br
 Спринг проверит параметр ProductDto pdto, и по результатам этой проверки заполнит BindingResult br.
 Состояние BindingResult после проверки проверяем мы:
 */
@@ -73,7 +71,7 @@ public class ProductController
         return toOptionalProductDto (p);
     }
 
-   //http://localhost:8189/market/api/v1/products   PUT
+   //http://localhost:8189/market/api/v1/products   PUT         edit_product.js,
     @PutMapping
     public Optional<ProductDto> updateProduct (@RequestBody ProductDto pdto)
     {
@@ -83,7 +81,7 @@ public class ProductController
         return toOptionalProductDto (p);
     }
 
-    //http://localhost:8189/market/api/v1/products/delete/11
+    //http://localhost:8189/market/api/v1/products/delete/11    store.js,
     @GetMapping ("/delete/{id}")
     public void deleteProductById (@PathVariable Long id)
     {

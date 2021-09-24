@@ -18,6 +18,10 @@ public class RegisterRequest
     @Length (min=3, max=128, message="длина пароля — [3…128] символов\r")
     private String password;
 
+    /*  Можно сделать два пароля при регистрации : пароль и подтверждение, -- и прверять,
+    чтобы они совпадали.
+    */
+
     @NotNull (message="укажите адрес электронной почты (5…64 символов); формат — xxx@xxx.xx\r")
     @Length (min=5, max=64, message="длина адреса — 5…64 символов; формат — xxx@xxx.xx\r")
     private String email;
