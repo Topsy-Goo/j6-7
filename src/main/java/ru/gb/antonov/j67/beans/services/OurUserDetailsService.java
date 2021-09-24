@@ -23,15 +23,15 @@ public class OurUserDetailsService implements UserDetailsService
 {
     private final OurUserRepo ourUserRepo;
     private final RoleService roleService;
-
+//-------------------------------------------------------------------
 
     public Optional<OurUser> findByLogin (String login)
     {
         return ourUserRepo.findByLogin (login);
     }
 
+    @Transactional           //AuthController,
     @Override
-    @Transactional
     public UserDetails loadUserByUsername (String login) /* throws UsernameNotFoundException - непонятно, зачем его пробрасывать, если оно наследуется от RuntimeException   */
     {
         String errMsg = String.format ("Логин (%s) не зарегистрирован.", login);
@@ -57,7 +57,7 @@ public class OurUserDetailsService implements UserDetailsService
                     .collect (Collectors.toList());
     }
 
-    @Transactional
+    @Transactional          //AuthController,
     public Optional<OurUser> createNewOurUser (String login, String password, String email)
     {
         OurUser dummyUser = OurUser.dummyOurUser (login, password, email);

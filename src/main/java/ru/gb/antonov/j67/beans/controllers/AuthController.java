@@ -10,15 +10,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.gb.antonov.j67.beans.errorhandlers.ErrorMessage;
 import ru.gb.antonov.j67.beans.errorhandlers.OurValidationException;
 import ru.gb.antonov.j67.beans.services.OurUserDetailsService;
+import ru.gb.antonov.j67.beans.utils.AppLoggingAspect;
 import ru.gb.antonov.j67.beans.utils.JwtokenUtil;
 import ru.gb.antonov.j67.entities.OurUser;
+import ru.gb.antonov.j67.entities.dtos.AopStatisticDto;
 import ru.gb.antonov.j67.entities.dtos.AuthRequest;
 import ru.gb.antonov.j67.entities.dtos.AuthResponse;
 import ru.gb.antonov.j67.entities.dtos.RegisterRequest;
@@ -34,9 +33,10 @@ public class AuthController
     private final OurUserDetailsService ourUserDetailsService;
     private final JwtokenUtil           jwtokenUtil;
     private final AuthenticationManager authenticationManager;
+    private final AppLoggingAspect appLoggingAspect;
 
 
-    //http://localhost:8189/market/api/v1/auth/login
+    //http://localhost:8189/market/api/v1/auth/login        index10.js,
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser (@RequestBody AuthRequest authRequest)
     {
@@ -61,7 +61,7 @@ public class AuthController
         return ResponseEntity.ok (new AuthResponse (token));
     }
 
-    //http://localhost:8189/market/api/v1/auth/register
+    //http://localhost:8189/market/api/v1/auth/register     registration.js,
     @PostMapping ("/register")
     public ResponseEntity<?> registerNewUser (@RequestBody @Validated RegisterRequest registerRequest,
                                               BindingResult br)
@@ -98,5 +98,15 @@ public class AuthController
         }
         return new ResponseEntity<> (new ErrorMessage ("Something went wrong."),
                                      HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    //http://localhost:8189/market/api/v1/auth/statistics   index10.js,
+    @GetMapping ("/statistics")
+    public AopStatisticDto getAopStatistics ()
+    {
+        return appLoggingAspect.getStatisticsAsDto();
+        /* Конечно AuthController не самый подходящий контроллер для такого запроса, но
+           он самый малозагруженный, а создавать отдельный контроллер для единственного
+           вызова показалось излишним. */
     }
 }
