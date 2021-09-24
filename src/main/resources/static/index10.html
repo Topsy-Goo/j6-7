@@ -30,7 +30,7 @@
 					<li class="nav-item" style="background-color: #E0F8C3; margin: 1px;">
 						<a class="nav-link" href="#!/main">🌞&nbsp;{{mainPageTitle}}</a>
 					</li>
-					<li class="nav-item" style="background-color: #E0F8C3; margin: 1px;" ng-show="isUserLoggedIn()">
+					<li class="nav-item" style="background-color: #E0F8C3; margin: 1px;"><!--  ng-show="isUserLoggedIn()" -->
 						<a class="nav-link" href="#!/store">📚&nbsp;{{storePageTitle}}</a>
 					</li>
 					<li class="nav-item"  style="background-color: #E0F8C3; margin: 1px;" ng-show="isUserLoggedIn()">
@@ -80,7 +80,10 @@
                         <button	class="btn btn-outline-secondary btn-sm"></button>
 					</li>-->
 					<li class="nav-item" style="background-color: #E0F8C3; margin: 1px;" ng-show="isUserLoggedIn()">
-						<a class="nav-link"  ng-click="tryToLogout()">🚪&nbsp;Выход</a>
+						<a class="nav-link" ng-click="tryToLogout()">🚪&nbsp;Выход</a>
+					</li>
+					<li class="nav-item" style="background-color: #E0F8C3; margin: 1px;">
+						<a class="nav-link" href="#!/main">Статистика</a>
 					</li>
 				</ul><!-- 🎀 📎 🔔 👤 🚪 🔕 🔒   -->
 			</div>
