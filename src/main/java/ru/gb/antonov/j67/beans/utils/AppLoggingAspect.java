@@ -1,142 +1,101 @@
 package ru.gb.antonov.j67.beans.utils;
 
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 import org.aspectj.lang.annotation.Aspect;
 import ru.gb.antonov.j67.entities.dtos.AopStatisticDto;
 
+import javax.annotation.PostConstruct;
+import java.lang.reflect.Method;
+import java.util.*;
+
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class AppLoggingAspect
 {
-    private long userServiceDuration = 0L;
-    private long productServiceDuration = 0L;
-    private long roleServiceDuration = 0L;
+    private Map<Class<?>, Map<String, Method>> markedClasses;
+    private Map<Class<?>, Long> classDurations;
+
+    private final String[] classNames =
+    {   "ru.gb.antonov.j67.beans.services.OurUserDetailsService",
+        "ru.gb.antonov.j67.beans.services.ProductService",
+        "ru.gb.antonov.j67.beans.services.RoleService"
+    };
+/*  Для того, чтобы методы в каком-то классе-бине обрабатывались нашим классом AppLoggingAspect,
+    нужно полное имя этого класса добавить (руками) в AppLoggingAspect.classNames, и нужные методы
+    добавленного класса пометить аннотацией @AopMark.
+
+    Кажется, работает только с публичными методами.     */
+//-----------------------------------------------------------------------------
+
+    @PostConstruct
+    public void init() throws ClassNotFoundException
+    {
+        markedClasses = new HashMap<>(classNames.length);
+        classDurations = new HashMap<>(classNames.length);
+        for (String cName : classNames)
+        {
+            Class<?> c = Class.forName (cName);
+            //if (c.isAnnotationPresent (AopMark.class))
+            {
+                markedClasses.put (c, inlineGetAopMarkedMethods (c));
+                classDurations.put (c, 0L);
+            }
+        }
+    }
+
+    private Map<String, Method> inlineGetAopMarkedMethods (Class<?> serviceClass)
+    {
+        Method[] methods = serviceClass.getDeclaredMethods();
+        HashMap<String, Method> hmap = new HashMap<>(methods.length);
+        for (Method m : methods)
+        {
+            if (m.isAnnotationPresent (AopMark.class))
+                hmap.put (m.getName(), m);
+        }
+        return hmap;
+    }
 
     public AopStatisticDto getStatisticsAsDto ()
-    {   return new AopStatisticDto (userServiceDuration, productServiceDuration, roleServiceDuration);
-    }
-//------------------------------------------ OurUserDetailsService AOP
-
-    private Object inlineCalcUserServiceAround (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
     {
-        long   begin    = System.currentTimeMillis ();
-        Object out      = proceedingJoinPoint.proceed ();
-        long   end      = System.currentTimeMillis ();
-        userServiceDuration += end - begin;
+        List<String> list = new ArrayList<>(classNames.length);
+        Set<Map.Entry<Class<?>, Long>> eSet = classDurations.entrySet();
+
+        for (Map.Entry<Class<?>, Long> e : eSet)
+        {
+            list.add (String.format ("%s = %d мс", e.getKey().getName(), e.getValue()));
+        }
+        return new AopStatisticDto (list.toArray(new String[0]));
+    }
+
+    @Around ("execution(public * ru.gb.antonov.j67.beans.services.*.*(..))")
+    public Object aroundPublicMethod (ProceedingJoinPoint pjp) throws Throwable
+    {
+        Signature signature = pjp.getSignature();
+        Class<?> c = signature.getDeclaringType();
+
+        Map<String, Method> markedMethods = markedClasses.get(c);
+        if (markedMethods != null && markedMethods.containsKey (signature.getName()))
+        {
+            return inlineCalcMethodRunTime (pjp, c);
+        }
+        return pjp.proceed();
+    }
+
+    private Object inlineCalcMethodRunTime (ProceedingJoinPoint pjp, Class<?> c) throws Throwable
+    {
+        long   millis = System.currentTimeMillis();
+        Object out = pjp.proceed();
+        millis = System.currentTimeMillis() - millis;
+
+        classDurations.replace (c, classDurations.get(c) + millis);
         return out;
     }
 
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.OurUserDetailsService.loadUserByUsername (..))")
-    public Object aroundOurUserService_loadUserByUsername (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcUserServiceAround (proceedingJoinPoint);
-    }
-
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.OurUserDetailsService.createNewOurUser (..))")
-    public Object aroundOurUserService_createNewOurUser (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcUserServiceAround (proceedingJoinPoint);
-    }
-//------------------------------------------ RoleService AOP
-
-    private Object inlineCalcRoleServiceAround (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        long   begin    = System.currentTimeMillis ();
-        Object out      = proceedingJoinPoint.proceed ();
-        long   end      = System.currentTimeMillis ();
-        roleServiceDuration += end - begin;
-        return out;
-    }
-
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.ProductService.findByName (..))")
-    public Object aroundProductService_findByName (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcRoleServiceAround (proceedingJoinPoint);
-    }
-
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.ProductService.getRoleUser (..))")
-    public Object aroundProductService_getRoleUser (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcRoleServiceAround (proceedingJoinPoint);
-    }
-//------------------------------------------ ProductService AOP
-
-    private Object inlineCalcProductServiceAround (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        long   begin    = System.currentTimeMillis ();
-        Object out      = proceedingJoinPoint.proceed ();
-        long   end      = System.currentTimeMillis ();
-        productServiceDuration += end - begin;
-        return out;
-    }
-
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.ProductService.findById (..))")
-    public Object aroundProductService_findById (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcProductServiceAround (proceedingJoinPoint);
-    }
-
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.ProductService.findAll (..))")
-    public Object aroundProductService_findAll (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcProductServiceAround (proceedingJoinPoint);
-    }
-
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.ProductService.getCartPage (..))")
-    public Object aroundProductService_getCartPage (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcProductServiceAround (proceedingJoinPoint);
-    }
-
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.ProductService.deleteById (..))")
-    public Object aroundProductService_deleteById (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcProductServiceAround (proceedingJoinPoint);
-    }
-
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.ProductService.createProduct (..))")
-    public Object aroundProductService_createProduct (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcProductServiceAround (proceedingJoinPoint);
-    }
-
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.ProductService.updateProduct (..))")
-    public Object aroundProductService_updateProduct (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcProductServiceAround (proceedingJoinPoint);
-    }
-
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.ProductService.getProductsByPriceRange (..))")
-    public Object aroundProductService_getProductsByPriceRange (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcProductServiceAround (proceedingJoinPoint);
-    }
-
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.ProductService.addToCart (..))")
-    public Object aroundProductService_addToCart (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcProductServiceAround (proceedingJoinPoint);
-    }
-
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.ProductService.removeFromCart (..))")
-    public Object aroundProductService_removeFromCart (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcProductServiceAround (proceedingJoinPoint);
-    }
-
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.ProductService.getCartItemsCount (..))")
-    public Object aroundProductService_getCartItemsCount (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcProductServiceAround (proceedingJoinPoint);
-    }
-
-    @Around ("execution(public * ru.gb.antonov.j67.beans.services.ProductService.productListToDtoList (..))")
-    public Object aroundProductService_productListToDtoList (ProceedingJoinPoint proceedingJoinPoint) throws Throwable
-    {
-        return inlineCalcProductServiceAround (proceedingJoinPoint);
-    }
 /*
     @Before ("execution(public void ru.gb.antonov.j67.beans.services.addUser())") // pointcut expression
     public void beforeAddUserInUserDAOClass ()

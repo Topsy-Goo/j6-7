@@ -12,6 +12,7 @@ angular.module('market-front').controller('mainController', function ($scope, $h
 		{
 			$scope.statistics = response.data;
 			console.log (response.data);
+			console.log (response);
 			//alert (response.data);
 		},
 		function failureCallback (response)

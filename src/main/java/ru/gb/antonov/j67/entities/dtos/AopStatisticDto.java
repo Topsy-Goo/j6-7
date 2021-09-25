@@ -7,14 +7,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AopStatisticDto
 {
+    /*
     private long userServiceDuration = 0L;
     private long productServiceDuration = 0L;
     private long roleServiceDuration = 0L;
+    */
+    private String[] text;
 
-    public AopStatisticDto (long user, long product, long role)
+    public AopStatisticDto (String ... str/*long user, long product, long role*/)
     {
+        text = str;
+        /*
         userServiceDuration = user;
         productServiceDuration = product;
         roleServiceDuration = role;
+        */
     }
 }

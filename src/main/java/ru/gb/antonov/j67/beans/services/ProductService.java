@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.gb.antonov.j67.beans.cart.ShoppingCart;
 import ru.gb.antonov.j67.beans.errorhandlers.ResourceNotFoundException;
 import ru.gb.antonov.j67.beans.repos.ProductRepo;
+import ru.gb.antonov.j67.beans.utils.AopMark;
 import ru.gb.antonov.j67.entities.Product;
 import ru.gb.antonov.j67.entities.dtos.ProductDto;
 
@@ -17,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//@AopMark
 @Service
 @RequiredArgsConstructor    //< создаёт конструктор с параметрами для инициализации всех final-полей.
 public class ProductService
@@ -26,6 +28,7 @@ public class ProductService
     private static int pageIndexLast = 0;
 //-----------------------------------------------------------------------
 
+    @AopMark
     @Transactional                  //ProductController,
     public Product findById (Long id)
     {
@@ -34,6 +37,7 @@ public class ProductService
                           .orElseThrow(()->new ResourceNotFoundException (errMessage));
     }
 
+    @AopMark
     @Transactional                  //ProductController,
     public Page<Product> findAll (int pageIndex, int pageSize)
     {
@@ -41,6 +45,7 @@ public class ProductService
         return productRepo.findAll (PageRequest.of (pageIndex, pageSize));
     }
 
+    @AopMark
     @Transactional              //CartController,
     public Page<Product> getCartPage (int pageIndex, int pageSize)
     {
@@ -75,6 +80,7 @@ public class ProductService
         return Math.max(pageIndex, 0);
     }
 
+    @AopMark
     @Transactional              //ProductController,
     public void deleteById (Long id)
     {
@@ -83,6 +89,7 @@ public class ProductService
         productRepo.delete(p);
     }
 
+    @AopMark
     @Transactional                  //ProductController,
     public Product createProduct (String title, double cost)
     {
@@ -91,6 +98,7 @@ public class ProductService
         return productRepo.save (p);
     }
 
+    @AopMark
     @Transactional                  //ProductController,
     public Product updateProduct (long id, String title, double cost)
     {
@@ -100,6 +108,7 @@ public class ProductService
         return productRepo.save (p);
     }
 
+    @AopMark
     @Transactional                  //ProductController,
     public List<Product> getProductsByPriceRange (Integer min, Integer max)
     {
@@ -110,6 +119,7 @@ public class ProductService
     }
 //-------------------- Корзина ------------------------------------------
 
+    @AopMark
     @Transactional          //CartController,
     public Integer addToCart (Long pid)
     {
@@ -117,6 +127,7 @@ public class ProductService
         return cart.getItemsCount();
     }
 
+    @AopMark
     @Transactional          //CartController,
     public Integer removeFromCart (Long pid)
     {
@@ -124,6 +135,7 @@ public class ProductService
         return cart.getItemsCount();
     }
 
+    @AopMark
     @Transactional          //CartController,
     public Integer getCartItemsCount ()
     {
@@ -136,6 +148,7 @@ public class ProductService
         return new ProductDto (product);
     }
 
+    @AopMark
     public static List<ProductDto> productListToDtoList (List<Product> pp)      //ProductController,
     {
         if (pp != null)

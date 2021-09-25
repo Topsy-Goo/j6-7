@@ -4,10 +4,15 @@
 	<p>&nbsp;</p>
 
 	<h3>Статистика использования сервисов</h3>
-	<ul>
+
+<!--	{{statistics.text}}-->
+<!--	<ul>
 		<li>OurUserDetailsService: {{statistics.userServiceDuration}} мс</li>
 		<li>ProductService: {{statistics.productServiceDuration}} мс</li>
 		<li>RoleService: {{statistics.roleServiceDuration}} мс</li>
+	</ul>-->
+	<ul>
+		<li ng-repeat="line in statistics.text">{{line}}</li>
 	</ul>
 
 

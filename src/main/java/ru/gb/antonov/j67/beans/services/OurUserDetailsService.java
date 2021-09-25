@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gb.antonov.j67.beans.repos.OurUserRepo;
+import ru.gb.antonov.j67.beans.utils.AopMark;
 import ru.gb.antonov.j67.entities.OurUser;
 import ru.gb.antonov.j67.entities.Role;
 
@@ -17,6 +18,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+//@AopMark
 @Service
 @RequiredArgsConstructor
 public class OurUserDetailsService implements UserDetailsService
@@ -30,6 +32,7 @@ public class OurUserDetailsService implements UserDetailsService
         return ourUserRepo.findByLogin (login);
     }
 
+    @AopMark
     @Transactional           //AuthController,
     @Override
     public UserDetails loadUserByUsername (String login) /* throws UsernameNotFoundException - непонятно, зачем его пробрасывать, если оно наследуется от RuntimeException   */
@@ -57,6 +60,7 @@ public class OurUserDetailsService implements UserDetailsService
                     .collect (Collectors.toList());
     }
 
+    @AopMark
     @Transactional          //AuthController,
     public Optional<OurUser> createNewOurUser (String login, String password, String email)
     {
